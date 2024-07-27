@@ -10,12 +10,11 @@ Ask, answer and accelerate your developer journey.
 
 </div>
 
-
 </div>
 
 <h2 align="center">
 
-<img src = "./public/eyes-to-see.gif" width = 26px align="top"/> &nbsp;[See it in Action](https://devs-overflow.vercel.app/) &nbsp;»
+<img src = "./public/eyes-to-see.gif" width = 26px align="top"/> &nbsp;[See it in Action](https://github.com/yntpdotme/devs-overflow/) &nbsp;»
 
 </h2>
 
@@ -82,9 +81,11 @@ Devs-Overflow is a modern, AI-powered Q&A platform built for developers. It comb
 ## 🤝&nbsp;&nbsp;Contributing
 
 Contributions are always welcome!
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for ways to get started.
 </br></br>
 
 ## 🪪&nbsp;&nbsp; License
 
-Devs-Overflow is open-source under the [MIT License](./LICENSE). 
+Devs-Overflow is open-source under the [MIT License](./LICENSE).
 Feel free to learn, add upon, and share!

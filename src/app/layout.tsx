@@ -1,6 +1,8 @@
 import type {Metadata} from "next";
+import {SessionProvider} from "next-auth/react";
 import localFont from "next/font/local";
 
+import {auth} from "@/auth";
 import ThemeProvider from "@/context/Theme";
 import "./globals.css";
 
@@ -16,28 +18,34 @@ const spaceGrotesk = localFont({
   weight: "300 400 500 700",
 });
 
-export default function RootLayout({
+const RootLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) => {
+  const session = await auth();
+
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
-      >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="dark"
-          enableSystem
-          disableTransitionOnChange
+    <SessionProvider session={session}>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
         >
-          {children}
-        </ThemeProvider>
-      </body>
-    </html>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="dark"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </body>
+      </html>
+    </SessionProvider>
   );
-}
+};
+
+export default RootLayout;
 
 export const metadata: Metadata = {
   title: "Devs Overflow",

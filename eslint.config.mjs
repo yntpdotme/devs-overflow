@@ -1,21 +1,21 @@
 import {FlatCompat} from "@eslint/eslintrc";
-import eslintJs from "@eslint/js";
+import eslint from "@eslint/js";
 import tsParser from "@typescript-eslint/parser";
 import importPlugin from "eslint-plugin-import";
 import path from "node:path";
 import {fileURLToPath} from "node:url";
 import {configs as tsConfigs} from "typescript-eslint";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const filename = fileURLToPath(import.meta.url);
+const dirname = path.dirname(filename);
 
 const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: eslintJs.configs.recommended,
-  allConfig: eslintJs.configs.all,
+  baseDirectory: dirname,
+  recommendedConfig: eslint.configs.recommended,
+  allConfig: eslint.configs.all,
 });
 
-const tsFiles = ["**/*.ts", "**/*.tsx"];
+const tsFiles = ["/*.ts", "/*.tsx"];
 
 const customTypescriptConfig = {
   files: tsFiles,

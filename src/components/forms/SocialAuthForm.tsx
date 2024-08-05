@@ -9,7 +9,7 @@ const SocialAuthForm = () => {
     "background-dark400_light900 body-medium text-dark200_light800 min-h-10 flex-1 rounded-2 px-4 py-3.5";
 
   return (
-    <div className="mt-10 flex flex-wrap gap-2.5">
+    <div className="mt-6 flex flex-wrap gap-3">
       <Button className={buttonClass} onClick={() => {}}>
         <Image
           src="/icons/github.svg"

@@ -67,7 +67,7 @@ const SignInForm = () => {
               </FormControl>
               <FormMessage />
               <div className="text-right text-sm text-[#1DA1F2]">
-                <Link href="/sign-in">Forget password..?</Link>
+                <Link href="/">Forget password..?</Link>
               </div>
             </FormItem>
           )}

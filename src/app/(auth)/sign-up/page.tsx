@@ -1,5 +1,6 @@
 import AuthForm from "@/components/forms/AuthForm";
 import SignUpForm from "@/components/forms/SignUpForm";
+import ROUTES from "@/constants/routes";
 
 const SignUp = () => {
   return (
@@ -8,7 +9,7 @@ const SignUp = () => {
       headerText="to get your questions answered"
       backButtonMessage="Already have an account..?"
       backButtonLabel="Sign in"
-      backButtonHref="/sign-in"
+      backButtonHref={ROUTES.SIGN_UP}
       showSocial
     >
       <SignUpForm />

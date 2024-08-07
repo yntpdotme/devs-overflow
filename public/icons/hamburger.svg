@@ -1,5 +1,5 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M20.05 11H3.95C3.42533 11 3 11.4253 3 11.95V12.05C3 12.5747 3.42533 13 3.95 13H20.05C20.5747 13 21 12.5747 21 12.05V11.95C21 11.4253 20.5747 11 20.05 11Z" fill="#FFF"/>
-<path d="M20.05 16H3.95C3.42533 16 3 16.4253 3 16.95V17.05C3 17.5747 3.42533 18 3.95 18H20.05C20.5747 18 21 17.5747 21 17.05V16.95C21 16.4253 20.5747 16 20.05 16Z" fill="#FFF"/>
-<path d="M20.05 6H3.95C3.42533 6 3 6.42533 3 6.95V7.05C3 7.57467 3.42533 8 3.95 8H20.05C20.5747 8 21 7.57467 21 7.05V6.95C21 6.42533 20.5747 6 20.05 6Z" fill="#FFF"/>
+<svg width="64" height="64" viewBox="0 0 25 25" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#fff" stroke-width="0" transform="scale(-1 1)">
+  <g/>
+  <g stroke-linecap="round" stroke-linejoin="round" stroke="#CCC" stroke-width=".5"/>
+  <path d="M5.5 7.75a.75.75 0 0 0 0 1.5zm14 1.5a.75.75 0 0 0 0-1.5zm-14 2.5a.75.75 0 0 0 0 1.5zm12 1.5a.75.75 0 0 0 0-1.5zm-12 2.5a.75.75 0 0 0 0 1.5zm7 1.5a.75.75 0 0 0 0-1.5zm-7-8h14v-1.5h-14zm0 4h12v-1.5h-12zm0 4h7v-1.5h-7z" fill="#FFF" stroke="none"/>
 </svg>

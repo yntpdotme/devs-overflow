@@ -9,7 +9,7 @@ const SignUp = () => {
       headerText="to get your questions answered"
       backButtonMessage="Already have an account..?"
       backButtonLabel="Sign in"
-      backButtonHref={ROUTES.SIGN_UP}
+      backButtonHref={ROUTES.SIGN_IN}
       showSocial
     >
       <SignUpForm />

@@ -9,10 +9,10 @@ const SignIn = () => {
       headerText="sign in to access your account"
       backButtonMessage="Don't have an account yet?"
       backButtonLabel="Sign up"
-      backButtonHref={ROUTES.SIGN_IN}
+      backButtonHref={ROUTES.SIGN_UP}
       showSocial
       showGuestSignIn
-    >
+    > 
       <SignInForm />
     </AuthForm>
   );

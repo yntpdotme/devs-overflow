@@ -1,16 +1,18 @@
 "use client";
 
-import {SheetClose} from "@/components/ui/sheet";
-import {sidebarLinks} from "@/constants";
-import {cn} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 import {usePathname} from "next/navigation";
 import React from "react";
 
+import {SheetClose} from "@/components/ui/sheet";
+import {sidebarLinks} from "@/constants";
+import ROUTES from "@/constants/routes";
+import {cn} from "@/lib/utils";
+
 const NavLinks = ({isMobileNav = false}: {isMobileNav?: boolean}) => {
   const pathname = usePathname();
-  const userId = 1;
+  const userId = "1";
 
   return (
     <>
@@ -20,7 +22,7 @@ const NavLinks = ({isMobileNav = false}: {isMobileNav?: boolean}) => {
           pathname === item.route;
 
         if (item.route === "/profile") {
-          if (userId) item.route = `${item.route}/${userId}`;
+          if (userId) item.route = ROUTES.PROFILE(userId);
         }
 
         const LinkComponent = (
@@ -43,7 +45,8 @@ const NavLinks = ({isMobileNav = false}: {isMobileNav?: boolean}) => {
             />
             <p
               className={cn(
-                isActive ? "paragraph-bold" : "paragraph-medium",
+                isActive ? "paragraph-semibold" : "paragraph-regular",
+                !isMobileNav && "max-lg:hidden"
               )}
             >
               {item.label}

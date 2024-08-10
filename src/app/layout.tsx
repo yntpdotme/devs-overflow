@@ -18,7 +18,7 @@ const spaceGrotesk = localFont({
   weight: "300 400 500 700",
 });
 
-const RootLayout = async ({
+const GlobalLayout = async ({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -29,7 +29,7 @@ const RootLayout = async ({
     <SessionProvider session={session}>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${inter.className} ${spaceGrotesk.variable} antialiased`}
+          className={`${inter.className} ${spaceGrotesk.variable} background-light850_dark100 relative antialiased`}
         >
           <ThemeProvider
             attribute="class"
@@ -45,7 +45,7 @@ const RootLayout = async ({
   );
 };
 
-export default RootLayout;
+export default GlobalLayout;
 
 export const metadata: Metadata = {
   title: "Devs Overflow",

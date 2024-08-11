@@ -28,6 +28,13 @@ const GlobalLayout = async ({
   return (
     <SessionProvider session={session}>
       <html lang="en" suppressHydrationWarning>
+        <head>
+          <link
+            rel="stylesheet"
+            type="text/css"
+            href="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/devicon.min.css"
+          />
+        </head>
         <body
           className={`${inter.className} ${spaceGrotesk.variable} background-light850_dark100 relative antialiased`}
         >

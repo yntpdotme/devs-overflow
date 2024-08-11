@@ -8,7 +8,7 @@ import Theme from "./Theme";
 
 const Navbar = () => {
   return (
-    <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 px-6 py-4 shadow-light-300 dark:shadow-none sm:px-12 md:py-5">
+    <nav className="flex-between background-light900_dark200 fixed z-50 w-full gap-5 px-6 py-4 shadow-light-300 dark:shadow-none sm:px-12 lg:py-5">
       <Link href={ROUTES.HOME} className="flex items-center gap-2">
         <Image
           src="images/site-logo.svg"
@@ -24,7 +24,7 @@ const Navbar = () => {
 
       <GlobalSearch />
 
-      <div className="flex-between gap-2.5 md:w-32 md:justify-end">
+      <div className="flex-between gap-2.5 xl:w-48 xl:justify-end">
         <Theme />
 
         <MobileNavigation />

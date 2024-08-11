@@ -1,5 +1,6 @@
 import LeftSidebar from "@/components/navigation/LeftSidebar";
 import Navbar from "@/components/navigation/navbar";
+import RightSidebar from "@/components/navigation/RightSidebar";
 import {ReactNode} from "react";
 
 const RootLayout = ({children}: {children: ReactNode}) => {
@@ -14,6 +15,9 @@ const RootLayout = ({children}: {children: ReactNode}) => {
           <LeftSidebar />
         </aside>
         <main className="no-scrollbar flex-1 overflow-y-auto">{children}</main>
+        <aside>
+          <RightSidebar />
+        </aside>
       </div>
     </>
   );

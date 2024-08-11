@@ -35,6 +35,21 @@ body {
   background: #555;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+  width: 3px;
+  height: 3px;
+  border-radius: 2px;
+}
+
+/* Left scrollbar */
+.custom-scrollbar-left {
+  direction: rtl; /* Moves scrollbar to the left */
+}
+
+.custom-scrollbar-left > * {
+  direction: ltr; /* Restores normal text alignment */
+}
+
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;

@@ -4,7 +4,7 @@ import Image from "next/image";
 const GlobalSearch = () => {
   return (
     <div className="w-full max-w-[450px] max-lg:hidden">
-      <div className="background-light800_darkgradient relative flex items-center rounded-xl px-4 py-0.5">
+      <div className="background-light800_darkgradient relative flex items-center gap-0.5 rounded-xl px-4 py-0.5">
         <Image
           src="/icons/search.svg"
           alt="search"
@@ -16,7 +16,7 @@ const GlobalSearch = () => {
         <Input
           type="text"
           placeholder="Search globally"
-          className="paragraph-regular no-focus text-dark400_light700 border-none bg-transparent py-0 shadow-none outline-none"
+          className="paragraph-regular no-focus placeholder text-dark400_light700 border-none bg-transparent py-0 shadow-none outline-none"
         />
       </div>
     </div>

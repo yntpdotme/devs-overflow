@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import ROUTES from "@/constants/routes";
-import GlobalSearch from "../search/GlobalSearch";
+import GlobalSearch from "@/components/search/GlobalSearch";
 import MobileNavigation from "./MobileNavigation";
 import Theme from "./Theme";
 

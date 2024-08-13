@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 import HomeFilter from "@/components/filters/HomeFilter";
-import LocalSearch from "@/components/navigation/search/LocalSearch";
+import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 
@@ -36,7 +36,13 @@ const questions = [
   },
 ];
 
-const Home = () => {
+type HomeProps = {
+  searchParams: Promise<Record<string, string>>;
+};
+
+const Home = async ({searchParams}: HomeProps) => {
+  const {q = ""} = await searchParams;
+
   return (
     <>
       <section className="flex flex-col-reverse justify-between gap-4 px-6 pt-10 sm:flex-row sm:items-center sm:px-12 lg:pt-12">
@@ -52,18 +58,26 @@ const Home = () => {
         </Button>
       </section>
 
-      <section className="mt-11 px-6 sm:px-12">
-        <LocalSearch />
+      <section className="mt-8 px-6 sm:mt-10 sm:px-12">
+        <LocalSearch
+          route={ROUTES.HOME}
+          placeholder="Search for questions here..."
+          otherClasses="flex-1"
+        />
       </section>
 
       <HomeFilter />
 
       <div className="mt-10 flex w-full flex-col gap-4 px-6 sm:px-12">
-        {questions.map(q => (
-          <h3 key={q._id} className="text-lg font-semibold">
-            {q.title}
-          </h3>
-        ))}
+        {questions
+          .filter(question =>
+            question.title.toLowerCase().includes(q?.toLowerCase())
+          )
+          .map(question => (
+            <h3 key={question._id} className="text-lg font-semibold">
+              {question.title}
+            </h3>
+          ))}
       </div>
     </>
   );

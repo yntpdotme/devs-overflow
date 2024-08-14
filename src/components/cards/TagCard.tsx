@@ -19,7 +19,7 @@ const TagCard = ({_id, name, questions, showCount, compact}: TagCardProps) => {
     <>
       <Badge className="subtle-medium background-light800_dark300 text-light400_light500 flex flex-row gap-2 rounded-md border-none px-4 py-2 uppercase">
         <div className="flex-center space-x-2">
-          <i className={`${iconClass} text-sm`}></i>
+          <i className={cn(iconClass, "text-sm")}></i>
           <span>{name}</span>
         </div>
       </Badge>

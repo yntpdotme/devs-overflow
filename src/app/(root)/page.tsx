@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import QuestionCard from "@/components/cards/QuestionCard";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
@@ -14,25 +15,33 @@ const questions = [
       {_id: "1", name: "React"},
       {_id: "2", name: "JavaScript"},
     ],
-    author: {_id: "1", name: "John Doe"},
+    author: {
+      _id: "1",
+      name: "John Doe",
+      image: "",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2025-01-29"),
   },
   {
     _id: "2",
     title: "How to learn JavaScript?",
     description: "I want to learn JavaScript, can anyone help me?",
     tags: [
-      {_id: "1", name: "React"},
-      {_id: "2", name: "JavaScript"},
+      {_id: "1", name: "JavaScript"},
+      {_id: "2", name: "JS"},
     ],
-    author: {_id: "1", name: "John Doe"},
+    author: {
+      _id: "2",
+      name: "John Smith",
+      image: "",
+    },
     upvotes: 10,
     answers: 5,
     views: 100,
-    createdAt: new Date(),
+    createdAt: new Date("2024-09-01"),
   },
 ];
 
@@ -68,15 +77,13 @@ const Home = async ({searchParams}: HomeProps) => {
 
       <HomeFilter />
 
-      <div className="mt-10 flex w-full flex-col gap-4 px-6 sm:px-12">
+      <div className="mt-10 flex w-full flex-col gap-6 px-6 sm:px-12">
         {questions
           .filter(question =>
             question.title.toLowerCase().includes(q?.toLowerCase())
           )
           .map(question => (
-            <h3 key={question._id} className="text-lg font-semibold">
-              {question.title}
-            </h3>
+            <QuestionCard key={question._id} question={question} />
           ))}
       </div>
     </>

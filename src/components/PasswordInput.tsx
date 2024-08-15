@@ -21,13 +21,13 @@ const PasswordInput = <TFieldValues extends FieldValues>({
   };
 
   return (
-    <div className="background-light900_dark300 flex items-end rounded-md border">
+    <div className="background-light900_dark300 light-border-2 flex items-end rounded-md border shadow-sm">
       <Input
         {...field}
         placeholder={showPassword ? "password" : placeholder}
         type={showPassword ? "text" : "password"}
         disabled={disabled}
-        className="paragraph-regular light-border-2 text-dark300_light700 no-focus min-h-10 rounded-1.5 border-0 hover:outline-none"
+        className="paragraph-regular text-dark300_light700 no-focus min-h-10 rounded-1.5 border-0 shadow-none hover:outline-none"
       />
       <button
         type="button"

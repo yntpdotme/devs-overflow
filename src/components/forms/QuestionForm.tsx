@@ -1,6 +1,10 @@
 "use client";
 
 import {zodResolver} from "@hookform/resolvers/zod";
+import {MDXEditorMethods} from "@mdxeditor/editor";
+import "@mdxeditor/editor/style.css";
+import dynamic from "next/dynamic";
+import {useRef} from "react";
 import {useForm} from "react-hook-form";
 
 import {Button} from "@/components/ui/button";
@@ -19,7 +23,13 @@ import {z} from "zod";
 import {FormError} from "./FormError";
 import {FormSuccess} from "./FormSuccess";
 
+const Editor = dynamic(() => import("@/components/editor"), {
+  ssr: false,
+});
+
 const QuestionForm = () => {
+  const editorRef = useRef<MDXEditorMethods>(null);
+
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
@@ -48,7 +58,7 @@ const QuestionForm = () => {
               </FormLabel>
               <FormControl>
                 <Input
-                  className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus min-h-10 border px-4"
+                  className="paragraph-regular background-light800_dark300 light-border-2 text-dark300_light700 no-focus min-h-10 border px-4"
                   {...field}
                 />
               </FormControl>
@@ -70,7 +80,13 @@ const QuestionForm = () => {
                 Detailed explanation of your problem{" "}
                 <span className="text-primary-500">*</span>
               </FormLabel>
-              <FormControl>{field.name}</FormControl>
+              <FormControl>
+                <Editor
+                  value={field.value}
+                  editorRef={editorRef}
+                  fieldChange={field.onChange}
+                />
+              </FormControl>
               <FormDescription className="body-regular mt-2.5 text-light-500">
                 Introduce the problem and expand on what you&apos;ve put in the
                 title.
@@ -91,8 +107,7 @@ const QuestionForm = () => {
               <FormControl>
                 <div>
                   <Input
-                    className="paragraph-regular background-light700_dark300 light-border-2 text-dark300_light700 no-focus placeholder min-h-10 border px-4"
-                    placeholder="Add tags..."
+                    className="paragraph-regular background-light800_dark300 light-border-2 text-dark300_light700 no-focus placeholder min-h-10 border px-4"
                     {...field}
                   />
                   <div className="mt-2.5 text-sm">tag1 tag2 tag3</div>

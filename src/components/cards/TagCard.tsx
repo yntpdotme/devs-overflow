@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import {Badge} from "@/components/ui/badge";
@@ -10,9 +11,21 @@ type TagCardProps = {
   questions?: number;
   showCount?: boolean;
   compact?: boolean;
+  remove?: boolean;
+  isButton?: boolean;
+  handleRemove?: () => void;
 };
 
-const TagCard = ({_id, name, questions, showCount, compact}: TagCardProps) => {
+const TagCard = ({
+  _id,
+  name,
+  questions,
+  showCount,
+  compact,
+  remove = false,
+  isButton = false,
+  handleRemove,
+}: TagCardProps) => {
   const iconClass = getDeviconClassName(name);
 
   const Content = (
@@ -22,6 +35,17 @@ const TagCard = ({_id, name, questions, showCount, compact}: TagCardProps) => {
           <i className={cn(iconClass, "text-sm")}></i>
           <span>{name}</span>
         </div>
+
+        {remove && (
+          <Image
+            src="/icons/close.svg"
+            width={12}
+            height={12}
+            alt="close icon"
+            className="cursor-pointer object-contain invert-0 dark:invert"
+            onClick={handleRemove}
+          />
+        )}
       </Badge>
 
       {showCount && (
@@ -31,11 +55,15 @@ const TagCard = ({_id, name, questions, showCount, compact}: TagCardProps) => {
   );
 
   if (compact) {
-    return (
-      <Link
-        href={ROUTES.TAG(_id)}
-        className="flex items-center justify-between gap-2"
+    return isButton ? (
+      <button
+        onClick={e => e.preventDefault()}
+        className="flex justify-between gap-2"
       >
+        {Content}
+      </button>
+    ) : (
+      <Link href={ROUTES.TAG(_id)} className="flex justify-between gap-2">
         {Content}
       </Link>
     );

@@ -77,7 +77,7 @@ const Home = async ({searchParams}: HomeProps) => {
 
       <HomeFilter />
 
-      <div className="mt-10 flex w-full flex-col gap-6 px-6 sm:px-12">
+      <div className="mt-10 flex w-full flex-col gap-8 px-6 sm:px-12">
         {questions
           .filter(question =>
             question.title.toLowerCase().includes(q?.toLowerCase())

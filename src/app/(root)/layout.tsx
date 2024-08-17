@@ -14,7 +14,7 @@ const RootLayout = ({children}: {children: ReactNode}) => {
         <aside>
           <LeftSidebar />
         </aside>
-        <main className="no-scrollbar flex-1 overflow-y-auto">{children}</main>
+        <main className="no-scrollbar flex-1 overflow-y-auto pb-10">{children}</main>
         <aside>
           <RightSidebar />
         </aside>

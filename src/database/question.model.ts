@@ -1,6 +1,6 @@
 import {Document, model, models, Schema, Types} from "mongoose";
 
-export type IQuestion = {
+export type QuestionType = {
   title: string;
   content: string;
   tags: Types.ObjectId[];
@@ -11,9 +11,9 @@ export type IQuestion = {
   author: Types.ObjectId;
 };
 
-export type IQuestionDoc = IQuestion & Document;
+export type QuestionDoc = QuestionType & Document;
 
-const QuestionSchema = new Schema<IQuestion>(
+const QuestionSchema = new Schema<QuestionType>(
   {
     title: {type: String, required: true},
     content: {type: String, required: true},
@@ -28,6 +28,6 @@ const QuestionSchema = new Schema<IQuestion>(
 );
 
 const Question =
-  models?.Question || model<IQuestion>("Question", QuestionSchema);
+  models?.Question || model<QuestionType>("Question", QuestionSchema);
 
 export default Question;

@@ -1,5 +1,7 @@
 import mongoose, {Mongoose} from "mongoose";
 
+import logger from "@/lib/logger";
+
 const MONGODB_URL = process.env.DATABASE_URL as string;
 
 if (!MONGODB_URL) throw new Error("Database URL");
@@ -27,7 +29,7 @@ if (!cached) {
  */
 const connectDB = async () => {
   if (cached.conn) {
-    console.log("Using existing mongoose connection");
+    logger.info("Using existing mongoose connection");
     return cached.conn;
   }
 
@@ -35,11 +37,11 @@ const connectDB = async () => {
     cached.promise = mongoose
       .connect(MONGODB_URL, {dbName: "devs-overflow"})
       .then(result => {
-        console.log("Connected to MongoDB");
+        logger.info("Connected to MongoDB");
         return result;
       })
       .catch(error => {
-        console.error("Failed to connect to MongoDB:", error);
+        logger.info("Failed to connect to MongoDB:", error);
         cached.promise = null;
         throw error;
       });

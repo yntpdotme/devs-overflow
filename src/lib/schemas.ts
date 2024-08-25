@@ -121,3 +121,29 @@ export const AccountSchema = z.object({
     .string()
     .min(1, {message: "Provider Account ID is required."}),
 });
+
+export const SignInWithOAuthSchema = z.object({
+  provider: z.enum(["google", "github"]),
+  providerAccountId: z
+    .string()
+    .min(1, {message: "Provider Account ID is required."}),
+  user: z.object({
+    name: z
+      .string()
+      .min(1, {message: "Name is required."})
+      .max(50, {message: "Name cannot exceed 50 characters."})
+      .regex(/^[a-zA-Z\s]+$/, {
+        message: "Name can only contain letters and spaces.",
+      }),
+    username: z
+      .string()
+      .min(3, {message: "Username must be at least 3 characters long."})
+      .max(30, {message: "Username cannot exceed 30 characters."}),
+
+    email: z.string().email({message: "Please provide a valid email address."}),
+    image: z
+      .string()
+      .url({message: "Please provide a valid image URL."})
+      .optional(),
+  }),
+});

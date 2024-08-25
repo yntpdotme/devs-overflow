@@ -41,3 +41,14 @@ export type APIErrorResponse = NextResponse<ErrorResponse>;
 export type APIResponse<T = null> = NextResponse<
   SuccessResponse<T> | ErrorResponse
 >;
+
+export type SignInWithOAuthParams = {
+  provider: "github" | "google";
+  providerAccountId: string;
+  user: {
+    name: string;
+    username: string;
+    email: string;
+    image: string;
+  };
+};

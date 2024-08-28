@@ -2,7 +2,7 @@ import {NextRequest, NextResponse} from "next/server";
 
 import {User} from "@/database";
 import connectDB from "@/lib/db";
-import handleError from "@/lib/handlers/error";
+import {handleError} from "@/lib/handlers";
 import {ValidationError} from "@/lib/http-errors";
 import {UserSchema} from "@/lib/schemas";
 import {APIErrorResponse} from "@/types";

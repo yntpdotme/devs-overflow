@@ -1,4 +1,4 @@
-import handleError from "@/lib/handlers/error";
+import {handleError} from "@/lib/handlers";
 import {RequestError} from "@/lib/http-errors";
 import logger from "@/lib/logger";
 import {ActionResponse} from "@/types";
@@ -9,7 +9,7 @@ type FetchOptions = RequestInit & {
 
 const isError = (error: unknown): error is Error => error instanceof Error;
 
-export const fetchHandler = async <T>(
+const fetchHandler = async <T>(
   url: string,
   options: FetchOptions = {}
 ): Promise<ActionResponse<T>> => {
@@ -52,3 +52,5 @@ export const fetchHandler = async <T>(
     return handleError(error) as ActionResponse<T>;
   }
 };
+
+export default fetchHandler;

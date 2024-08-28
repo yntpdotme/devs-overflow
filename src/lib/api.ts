@@ -1,6 +1,6 @@
 import {AccountType} from "@/database/account.model";
 import {UserType} from "@/database/user.model";
-import {fetchHandler} from "@/lib/handlers/fetch";
+import {fetchHandler} from "@/lib/handlers";
 import {SignInWithOAuthParams} from "@/types";
 
 const API_BASE_URL =

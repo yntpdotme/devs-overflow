@@ -1,3 +1,3 @@
-import {signUpWithCredentials} from "./auth.action";
+import {signInWithCredentials, signUpWithCredentials} from "./auth.action";
 
-export {signUpWithCredentials};
+export {signInWithCredentials, signUpWithCredentials};

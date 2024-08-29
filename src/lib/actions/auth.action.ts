@@ -1,11 +1,13 @@
 "use server";
 
+import bcryptjs from "bcryptjs";
 import mongoose from "mongoose";
 
 import {signIn} from "@/auth";
 import {Account, User} from "@/database";
 import {action, handleError} from "@/lib/handlers";
-import {SignUpSchema} from "@/lib/schemas";
+import {NotFoundError} from "@/lib/http-errors";
+import {SignInSchema, SignUpSchema} from "@/lib/schemas";
 import {ActionResponse, AuthCredentials, ErrorResponse} from "@/types";
 
 export const signUpWithCredentials = async (
@@ -60,5 +62,44 @@ export const signUpWithCredentials = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const signInWithCredentials = async (
+  params: Pick<AuthCredentials, "email" | "password">
+): Promise<ActionResponse> => {
+  const validationResult = await action({params, schema: SignInSchema});
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+  const {email, password} = validationResult.params!;
+
+  try {
+    const existingUser = await User.findOne({email});
+    if (!existingUser) throw new NotFoundError("User");
+
+    const existingAccount = await Account.findOne({
+      provider: "credentials",
+      providerAccountId: email,
+    });
+    if (!existingAccount) throw new NotFoundError("Account");
+
+    const passwordMatch = await bcryptjs.compare(
+      password,
+      existingAccount.password
+    );
+
+    if (!passwordMatch) throw new Error("Invalid credentials");
+
+    await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    return {success: true};
+  } catch (error: unknown) {
+    return handleError(error) as ErrorResponse;
   }
 };

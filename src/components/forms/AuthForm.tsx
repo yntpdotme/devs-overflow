@@ -1,3 +1,4 @@
+import ROUTES from "@/constants/routes";
 import Image from "next/image";
 import Link from "next/link";
 import {ReactNode} from "react";
@@ -34,13 +35,15 @@ const AuthForm = ({
             {headerText}
           </p>
         </div>
-        <Image
-          src="images/site-logo.svg"
-          alt="DevFlow Logo"
-          width={50}
-          height={50}
-          className="object-contain max-sm:size-[40]"
-        />
+        <Link href={ROUTES.HOME}>
+          <Image
+            src="images/site-logo.svg"
+            alt="DevFlow Logo"
+            width={50}
+            height={50}
+            className="object-contain max-sm:size-[40]"
+          />
+        </Link>
       </div>
 
       {children}

@@ -1,3 +1,4 @@
+import bcryptjs from "bcryptjs";
 import {Document, model, models, Schema, Types} from "mongoose";
 
 export type AccountType = {
@@ -22,6 +23,13 @@ const AccountSchema = new Schema<AccountType>(
   },
   {timestamps: true}
 );
+
+AccountSchema.pre("save", async function (next) {
+  if (!this.isModified("password") || !this.password) return next();
+
+  this.password = await bcryptjs.hash(this.password, 10);
+  next();
+});
 
 const Account = models?.Account || model<AccountType>("Account", AccountSchema);
 

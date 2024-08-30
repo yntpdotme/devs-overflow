@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 
 import {signIn} from "@/auth";
 import {Account, User} from "@/database";
+import connectDB from "@/lib/db";
 import {action, handleError} from "@/lib/handlers";
 import {NotFoundError} from "@/lib/http-errors";
 import {SignInSchema, SignUpSchema} from "@/lib/schemas";
@@ -95,6 +96,41 @@ export const signInWithCredentials = async (
     await signIn("credentials", {
       email,
       password,
+      redirect: false,
+    });
+
+    return {success: true};
+  } catch (error: unknown) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const signInAsGuest = async (): Promise<ActionResponse> => {
+  const GUEST_EMAIL = process.env.GUEST_EMAIL!;
+  const GUEST_PASSWORD = process.env.GUEST_PASSWORD!;
+
+  try {
+    connectDB();
+
+    const existingUser = await User.findOne({email: GUEST_EMAIL});
+    if (!existingUser) throw new NotFoundError("Guest User");
+
+    const existingAccount = await Account.findOne({
+      provider: "credentials",
+      providerAccountId: GUEST_EMAIL,
+    });
+
+    if (!existingAccount) throw new NotFoundError("Guest Account");
+
+    const passwordMatch = await bcryptjs.compare(
+      GUEST_PASSWORD,
+      existingAccount.password
+    );
+    if (!passwordMatch) throw new Error("Invalid guest credentials");
+
+    await signIn("credentials", {
+      email: GUEST_EMAIL,
+      password: GUEST_PASSWORD,
       redirect: false,
     });
 

@@ -15,7 +15,7 @@ const NavLinks = ({
   userId,
 }: {
   isMobileNav?: boolean;
-  userId?: string;
+  userId?: string | null;
 }) => {
   const pathname = usePathname();
 
@@ -26,13 +26,14 @@ const NavLinks = ({
           (pathname.includes(item.route) && item.route.length > 1) ||
           pathname === item.route;
 
-        if (item.route === "/profile") {
-          if (userId) item.route = ROUTES.PROFILE(userId);
-        }
+        const href =
+          item.route === "/profile" && userId
+            ? ROUTES.PROFILE(userId)
+            : item.route;
 
         const LinkComponent = (
           <Link
-            href={item.route}
+            href={href}
             key={item.label}
             className={cn(
               isActive

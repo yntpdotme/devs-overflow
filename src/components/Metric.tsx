@@ -40,7 +40,7 @@ const Metric = ({
       )}
 
       {!imgUrl && isAuthor && (
-        <span className="primary-gradient flex size-5 items-center justify-center rounded-full text-xs text-light-900">
+        <span className="primary-gradient flex size-5 items-center justify-center rounded-full font-space-grotesk text-xs font-semibold text-white">
           {getFirstLetter(value)}
         </span>
       )}

@@ -9,6 +9,31 @@ import {ValidationError} from "@/lib/http-errors";
 import {SignInWithOAuthSchema} from "@/lib/schemas";
 import {APIErrorResponse} from "@/types";
 
+const generateUniqueUsername = async (
+  baseUsername: string,
+  session: mongoose.ClientSession
+): Promise<string> => {
+  const username = slugify(baseUsername, {
+    lower: true,
+    strict: true,
+    trim: true,
+  });
+  const exists = await User.findOne({username}).session(session);
+  if (!exists) return username;
+
+  let counter = 1;
+  while (true) {
+    const newUsername = slugify(`${baseUsername}${counter}`, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+    const exists = await User.findOne({username: newUsername}).session(session);
+    if (!exists) return newUsername;
+    counter++;
+  }
+};
+
 export const POST = async (request: NextRequest) => {
   let session: mongoose.ClientSession | null = null;
 
@@ -24,15 +49,11 @@ export const POST = async (request: NextRequest) => {
     session = await mongoose.startSession();
     session?.startTransaction();
 
-    const username = slugify(user.username, {
-      lower: true,
-      strict: true,
-      trim: true,
-    });
-
     let existingUser = await User.findOne({email: user.email}).session(session);
 
     if (!existingUser) {
+      const username = await generateUniqueUsername(user.username, session);
+
       [existingUser] = await User.create(
         [
           {

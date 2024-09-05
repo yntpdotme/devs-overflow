@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
+import {Skeleton} from "@/components/ui/skeleton";
 import {AskQuestionSchema} from "@/lib/schemas";
 import {z} from "zod";
 import {FormError} from "./FormError";
@@ -26,6 +27,9 @@ import {FormSuccess} from "./FormSuccess";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
+  loading: () => (
+    <Skeleton className="background-light800_dark300 h-96 w-full" />
+  ),
 });
 
 const QuestionForm = () => {

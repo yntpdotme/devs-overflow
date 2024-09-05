@@ -60,7 +60,7 @@ const MobileNavigation = async () => {
           </section>
         </SheetClose>
 
-        <SheetFooter className="flex flex-col gap-3">
+        <SheetFooter className="flex min-h-[92px] flex-col justify-end gap-3">
           {userId ? (
             <SheetClose asChild>
               <form
@@ -69,12 +69,13 @@ const MobileNavigation = async () => {
 
                   await signOut();
                 }}
+                className=""
               >
                 <Button
                   type="submit"
-                  className="base-medium flex w-fit items-center justify-start gap-4 !bg-transparent px-4 py-3"
+                  className="base-medium flex w-full items-center justify-start gap-4 !bg-transparent px-4 py-3  shadow-none"
                 >
-                  <LogOut className="!size-[15px] text-black dark:text-white" />
+                  <LogOut className="ml-[2px] !size-[14px] text-black dark:text-white" />
                   <span className="text-dark300_light900 paragraph-regular">
                     Logout
                   </span>

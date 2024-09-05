@@ -28,9 +28,9 @@ const LeftSidebar = async () => {
           >
             <Button
               type="submit"
-              className="base-medium flex w-fit items-center justify-start gap-4 !bg-transparent px-4 py-3"
+              className="base-medium flex w-fit items-center justify-start gap-4 !bg-transparent px-4 py-3 shadow-none"
             >
-              <LogOut className="!size-[15px] text-black dark:text-white" />
+              <LogOut className="ml-[2px] !size-[14px] text-black dark:text-white" />
               <span className="text-dark300_light900 paragraph-regular max-lg:hidden">
                 Logout
               </span>

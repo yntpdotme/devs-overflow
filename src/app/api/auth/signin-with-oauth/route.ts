@@ -104,7 +104,6 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json({success: true});
   } catch (error: unknown) {
-    console.log(error);
     await session?.abortTransaction();
     return handleError(error, "api") as APIErrorResponse;
   } finally {

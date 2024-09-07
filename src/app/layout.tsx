@@ -3,6 +3,7 @@ import {SessionProvider} from "next-auth/react";
 import localFont from "next/font/local";
 
 import {auth} from "@/auth";
+import {Toaster} from "@/components/ui/toaster";
 import ThemeProvider from "@/context/Theme";
 import "./globals.css";
 
@@ -46,6 +47,8 @@ const GlobalLayout = async ({
           >
             {children}
           </ThemeProvider>
+
+          <Toaster />
         </body>
       </html>
     </SessionProvider>

@@ -5,6 +5,8 @@ import Image from "next/image";
 
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import {toast} from "@/hooks/use-toast";
+import logger from "@/lib/logger";
 
 const SocialAuthForm = () => {
   const buttonClass =
@@ -17,7 +19,16 @@ const SocialAuthForm = () => {
         redirect: false,
       });
     } catch (error) {
-      console.log(error);
+      logger.error(error);
+
+      toast({
+        title: "Sign-in Failed",
+        description:
+          error instanceof Error
+            ? error.message
+            : "An error occured during sign-in",
+        variant: "destructive",
+      });
     }
   };
 

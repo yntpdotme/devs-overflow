@@ -1,8 +1,9 @@
 "use client";
 
 import {useRouter} from "next/navigation";
-import {useEffect, useState, useTransition} from "react";
+import {useEffect, useTransition} from "react";
 import {useForm} from "react-hook-form";
+import {AiOutlineReload} from "react-icons/ai";
 import {z} from "zod";
 
 import PasswordInput from "@/components/PasswordInput";
@@ -17,18 +18,14 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
+import {toast} from "@/hooks/use-toast";
 import {signUpWithCredentials} from "@/lib/actions";
 import {SignUpSchema} from "@/lib/schemas";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormError} from "./FormError";
-import {FormSuccess} from "./FormSuccess";
 
 const SignUpForm = () => {
   const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
 
   const form = useForm<z.infer<typeof SignUpSchema>>({
     resolver: zodResolver(SignUpSchema),
@@ -45,23 +42,25 @@ const SignUpForm = () => {
     form.setFocus("name");
   }, [form]);
 
-  const onSubmit = (values: z.infer<typeof SignUpSchema>) => {
-    setError("");
-    setSuccess("");
-
+  const onSubmit = (data: z.infer<typeof SignUpSchema>) => {
     startTransition(async () => {
-      const result = await signUpWithCredentials(values);
+      const result = await signUpWithCredentials(data);
 
       if (result?.success) {
         form.reset();
-        setSuccess("Signed up successfully");
+        toast({
+          title: "Success",
+          description: "Signed up successfully",
+        });
 
-        setTimeout(() => {
-          router.push(ROUTES.HOME);
-        }, 500);
+        router.replace(ROUTES.HOME);
+      } else {
+        toast({
+          title: `Error ${result?.status}`,
+          description: result?.error?.message,
+          variant: "destructive",
+        });
       }
-
-      setError(result?.error?.message);
     });
   };
 
@@ -140,16 +139,19 @@ const SignUpForm = () => {
           )}
         />
 
-        <FormError message={error} />
-
-        <FormSuccess message={success} />
-
         <Button
           type="submit"
           className="primary-gradient paragraph-medium min-h-10 w-full rounded-2 px-4 py-2 font-inter !text-light-900"
           disabled={isPending}
         >
-          Sign Up
+          {isPending ? (
+            <>
+              <AiOutlineReload className="animate-spin" />
+              <span>Signing up...</span>
+            </>
+          ) : (
+            <>Sign Up</>
+          )}
         </Button>
       </form>
     </Form>

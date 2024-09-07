@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import {useRouter} from "next/navigation";
-import {useEffect, useState, useTransition} from "react";
+import {useEffect, useTransition} from "react";
 import {useForm} from "react-hook-form";
+import {AiOutlineReload} from "react-icons/ai";
 import {z} from "zod";
 
 import PasswordInput from "@/components/PasswordInput";
@@ -18,18 +19,14 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import ROUTES from "@/constants/routes";
+import {toast} from "@/hooks/use-toast";
 import {signInWithCredentials} from "@/lib/actions";
 import {SignInSchema} from "@/lib/schemas";
 import {zodResolver} from "@hookform/resolvers/zod";
-import {FormError} from "./FormError";
-import {FormSuccess} from "./FormSuccess";
 
 const SignInForm = () => {
   const router = useRouter();
-
   const [isPending, startTransition] = useTransition();
-  const [error, setError] = useState<string | undefined>();
-  const [success, setSuccess] = useState<string | undefined>();
 
   const form = useForm<z.infer<typeof SignInSchema>>({
     resolver: zodResolver(SignInSchema),
@@ -44,23 +41,25 @@ const SignInForm = () => {
     form.setFocus("email");
   }, [form]);
 
-  const onSubmit = (values: z.infer<typeof SignInSchema>) => {
-    setError("");
-    setSuccess("");
-
+  const onSubmit = (data: z.infer<typeof SignInSchema>) => {
     startTransition(async () => {
-      const result = await signInWithCredentials(values);
+      const result = await signInWithCredentials(data);
 
       if (result?.success) {
         form.reset();
-        setSuccess("Signed in successfully");
+        toast({
+          title: "Success",
+          description: "Signed in successfully",
+        });
 
-        setTimeout(() => {
-          router.push(ROUTES.HOME);
-        }, 500);
+        router.replace(ROUTES.HOME);
+      } else {
+        toast({
+          title: `Error ${result?.status}`,
+          description: result?.error?.message,
+          variant: "destructive",
+        });
       }
-
-      setError(result?.error?.message);
     });
   };
 
@@ -104,16 +103,19 @@ const SignInForm = () => {
           )}
         />
 
-        <FormError message={error} />
-
-        <FormSuccess message={success} />
-
         <Button
           type="submit"
           className="primary-gradient paragraph-medium min-h-10 w-full rounded-2 px-4 py-2 font-inter !text-light-900"
           disabled={isPending}
         >
-          Sign In
+          {isPending ? (
+            <>
+              <AiOutlineReload className="animate-spin" />
+              <span>Signing in...</span>
+            </>
+          ) : (
+            <>Sign In</>
+          )}
         </Button>
       </form>
     </Form>

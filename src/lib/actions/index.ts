@@ -3,5 +3,11 @@ import {
   signInWithCredentials,
   signUpWithCredentials,
 } from "./auth.action";
+import {createQuestion} from "./question.action";
 
-export {signInAsGuest, signInWithCredentials, signUpWithCredentials};
+export {
+  createQuestion,
+  signInAsGuest,
+  signInWithCredentials,
+  signUpWithCredentials,
+};

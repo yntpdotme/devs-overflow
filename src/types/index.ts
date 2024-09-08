@@ -14,6 +14,7 @@ export type Author = {
 export type Question = {
   _id: string;
   title: string;
+  content: string;
   tags: Tag[];
   author: Author;
   createdAt: Date;
@@ -59,3 +60,9 @@ export type AuthCredentials = {
   email: string;
   password: string;
 };
+
+export type CreateQuestionParams = {
+  title: string;
+  content: string;
+  tags: string[];
+}

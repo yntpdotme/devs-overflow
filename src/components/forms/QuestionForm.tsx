@@ -4,8 +4,10 @@ import {zodResolver} from "@hookform/resolvers/zod";
 import {MDXEditorMethods} from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
 import dynamic from "next/dynamic";
-import {useRef} from "react";
+import {useRouter} from "next/navigation";
+import {useRef, useTransition} from "react";
 import {useForm} from "react-hook-form";
+import {AiOutlineReload} from "react-icons/ai";
 
 import TagCard from "@/components/cards/TagCard";
 import {Button} from "@/components/ui/button";
@@ -20,10 +22,11 @@ import {
 } from "@/components/ui/form";
 import {Input} from "@/components/ui/input";
 import {Skeleton} from "@/components/ui/skeleton";
+import ROUTES from "@/constants/routes";
+import {toast} from "@/hooks/use-toast";
+import {createQuestion} from "@/lib/actions";
 import {AskQuestionSchema} from "@/lib/schemas";
 import {z} from "zod";
-import {FormError} from "./FormError";
-import {FormSuccess} from "./FormSuccess";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -33,7 +36,9 @@ const Editor = dynamic(() => import("@/components/editor"), {
 });
 
 const QuestionForm = () => {
+  const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
+  const [isPending, startTransition] = useTransition();
 
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
@@ -84,7 +89,25 @@ const QuestionForm = () => {
   };
 
   const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
-    console.log(data);
+    startTransition(async () => {
+      const result = await createQuestion(data);
+
+      if (result.success) {
+        toast({
+          title: "Success",
+          description: "Question created successfully",
+        });
+
+        if (result.data)
+          router.push(ROUTES.QUESTION(result.data._id as string));
+      } else {
+        toast({
+          title: `Error ${result.status}`,
+          description: result.error?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+    });
   };
 
   return (
@@ -183,15 +206,19 @@ const QuestionForm = () => {
           )}
         />
 
-        <FormError message="" />
-
-        <FormSuccess message="" />
-
         <Button
           type="submit"
           className="primary-gradient mt-6 w-fit self-end !text-light-900"
+          disabled={isPending}
         >
-          Ask A Question
+          {isPending ? (
+            <>
+              <AiOutlineReload className="animate-spin" />
+              <span>Submitting</span>
+            </>
+          ) : (
+            <>Ask A Question</>
+          )}
         </Button>
       </form>
     </Form>

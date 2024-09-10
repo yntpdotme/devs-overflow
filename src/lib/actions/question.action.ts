@@ -1,12 +1,12 @@
-"use server"
+"use server";
 
 import mongoose from "mongoose";
 
 import {Question, Tag, TagQuestion} from "@/database";
+import {QuestionDoc} from "@/database/question.model";
 import {action, handleError} from "@/lib/handlers";
 import {AskQuestionSchema} from "@/lib/schemas";
 import {ActionResponse, CreateQuestionParams, ErrorResponse} from "@/types";
-import { QuestionDoc } from "@/database/question.model";
 
 export const createQuestion = async (
   params: CreateQuestionParams
@@ -31,35 +31,38 @@ export const createQuestion = async (
       [{title, content, author: userId}],
       {session}
     );
-    if (!question) throw new Error("Filed to create question");
+    if (!question) throw new Error("Failed to create question");
 
-    const tagIds: mongoose.Types.ObjectId[] = [];
-    const tagQuestionDocuments = [];
+    const tagUpdates = tags.map(tag => ({
+      updateOne: {
+        filter: {name: tag.toLowerCase()},
+        update: {$setOnInsert: {name: tag.toLowerCase()}, $inc: {questions: 1}},
+        upsert: true,
+      },
+    }));
 
-    for (const tag of tags) {
-      const existingTag = await Tag.findOneAndUpdate(
-        {name: {$regex: `^${tag}$`, $options: "i"}},
-        {$setOnInsert: {name: tag}, $inc: {questions: 1}},
-        {upsert: true, new: true, session}
-      );
+    await Tag.bulkWrite(tagUpdates, {session});
 
-      tagIds.push(existingTag._id);
-      tagQuestionDocuments.push({
-        tag: existingTag._id,
-        question: question._id,
-      });
-    }
-
-    await TagQuestion.insertMany(tagQuestionDocuments, {session});
-    await Question.findByIdAndUpdate(
-      question._id,
-      {$push: {tags: {$each: tagIds}}},
+    const tagNames = tags.map(t => t.toLowerCase());
+    const allTags = await Tag.find(
+      {name: {$in: tagNames}},
+      {_id: 1},
       {session}
     );
 
+    await TagQuestion.insertMany(
+      allTags.map(tag => ({tag: tag._id, question: question._id})),
+      {session}
+    );
+
+    question.tags = allTags.map(t => t._id);
+
+    await question.save({session});
     await session.commitTransaction();
 
-    return {success: true, data: JSON.parse(JSON.stringify(question))};
+    const finalQuestion = await Question.findById(question._id).lean();
+
+    return {success: true, data: JSON.parse(JSON.stringify(finalQuestion))};
   } catch (error) {
     if (session.inTransaction()) await session.abortTransaction();
 

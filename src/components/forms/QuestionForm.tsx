@@ -8,6 +8,7 @@ import {useRouter} from "next/navigation";
 import {useRef, useTransition} from "react";
 import {useForm} from "react-hook-form";
 import {AiOutlineReload} from "react-icons/ai";
+import {z} from "zod";
 
 import TagCard from "@/components/cards/TagCard";
 import {Button} from "@/components/ui/button";
@@ -26,7 +27,7 @@ import ROUTES from "@/constants/routes";
 import {toast} from "@/hooks/use-toast";
 import {createQuestion} from "@/lib/actions";
 import {AskQuestionSchema} from "@/lib/schemas";
-import {z} from "zod";
+import {Question} from "@/types";
 
 const Editor = dynamic(() => import("@/components/editor"), {
   ssr: false,
@@ -35,7 +36,12 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ),
 });
 
-const QuestionForm = () => {
+type QuestionFormProps = {
+  question?: Question;
+  isEdit?: boolean;
+};
+
+const QuestionForm = ({question, isEdit = false}: QuestionFormProps) => {
   const router = useRouter();
   const editorRef = useRef<MDXEditorMethods>(null);
   const [isPending, startTransition] = useTransition();
@@ -43,9 +49,9 @@ const QuestionForm = () => {
   const form = useForm<z.infer<typeof AskQuestionSchema>>({
     resolver: zodResolver(AskQuestionSchema),
     defaultValues: {
-      title: "",
-      content: "",
-      tags: [],
+      title: question?.title || "",
+      content: question?.content || "",
+      tags: question?.tags.map(tag => tag.name) || [],
     },
     mode: "onChange",
   });
@@ -56,7 +62,7 @@ const QuestionForm = () => {
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      const tagInput = e.currentTarget.value.trim();
+      const tagInput = e.currentTarget.value.trim().toLocaleLowerCase();
 
       if (tagInput && tagInput.length < 15 && !field.value.includes(tagInput)) {
         form.setValue("tags", [...field.value, tagInput]);
@@ -88,8 +94,12 @@ const QuestionForm = () => {
     }
   };
 
-  const handleCreateQuestion = (data: z.infer<typeof AskQuestionSchema>) => {
+  const handleSubmit = (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
+      if (isEdit && question) {
+        return;
+      }
+
       const result = await createQuestion(data);
 
       if (result.success) {
@@ -114,7 +124,7 @@ const QuestionForm = () => {
     <Form {...form}>
       <form
         className="flex flex-col gap-8"
-        onSubmit={form.handleSubmit(handleCreateQuestion)}
+        onSubmit={form.handleSubmit(handleSubmit)}
       >
         <FormField
           control={form.control}
@@ -217,7 +227,7 @@ const QuestionForm = () => {
               <span>Submitting</span>
             </>
           ) : (
-            <>Ask A Question</>
+            <>{isEdit ? "Edit Question" : "Ask a Question"}</>
           )}
         </Button>
       </form>

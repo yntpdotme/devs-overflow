@@ -89,7 +89,7 @@ export const AccountSchema = z.object({
       // eslint-disable-next-line camelcase
       invalid_type_error: "User ID must be a string.",
     })
-    .refine(val => val.length === 24, {message: "Invalid recipientId"}),
+    .refine(val => val.length === 24, {message: "Invalid userId"}),
   name: z
     .string()
     .min(1, {message: "Name is required."})
@@ -145,5 +145,14 @@ export const SignInWithOAuthSchema = z.object({
       .string()
       .url({message: "Please provide a valid image URL."})
       .optional(),
+  }),
+});
+
+export const GetQuestionSchema = z.object({
+  questionId: z.string({
+    // eslint-disable-next-line camelcase
+    required_error: "Question ID is required.",
+    // eslint-disable-next-line camelcase
+    invalid_type_error: "Question ID must be a string.",
   }),
 });

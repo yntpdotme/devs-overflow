@@ -5,8 +5,14 @@ import mongoose from "mongoose";
 import {Question, Tag, TagQuestion} from "@/database";
 import {QuestionDoc} from "@/database/question.model";
 import {action, handleError} from "@/lib/handlers";
-import {AskQuestionSchema} from "@/lib/schemas";
-import {ActionResponse, CreateQuestionParams, ErrorResponse} from "@/types";
+import {AskQuestionSchema, GetQuestionSchema} from "@/lib/schemas";
+import {
+  ActionResponse,
+  CreateQuestionParams,
+  ErrorResponse,
+  GetQuestionParams,
+  Question as QuestionType,
+} from "@/types";
 
 export const createQuestion = async (
   params: CreateQuestionParams
@@ -69,5 +75,35 @@ export const createQuestion = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const getQuestion = async (
+  params: GetQuestionParams
+): Promise<ActionResponse<QuestionType>> => {
+  const validationResult = await action({
+    params,
+    schema: GetQuestionSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {questionId} = validationResult.params!;
+
+  try {
+    const question = await Question.findById(questionId)
+      .populate("tags")
+      .populate("author", "_id name image");
+
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    return {success: true, data: JSON.parse(JSON.stringify(question))};
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };

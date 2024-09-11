@@ -65,4 +65,14 @@ export type CreateQuestionParams = {
   title: string;
   content: string;
   tags: string[];
-}
+};
+
+export type RouteParams = {
+  params: Promise<Record<string, string>>;
+  searchParams: Promise<Record<string, string>>;
+};
+
+export type GetQuestionParams = {
+  questionId: string;
+};
+

@@ -25,7 +25,7 @@ import {Input} from "@/components/ui/input";
 import {Skeleton} from "@/components/ui/skeleton";
 import ROUTES from "@/constants/routes";
 import {toast} from "@/hooks/use-toast";
-import {createQuestion} from "@/lib/actions";
+import {createQuestion, editQuestion} from "@/lib/actions";
 import {AskQuestionSchema} from "@/lib/schemas";
 import {Question} from "@/types";
 
@@ -97,6 +97,27 @@ const QuestionForm = ({question, isEdit = false}: QuestionFormProps) => {
   const handleSubmit = (data: z.infer<typeof AskQuestionSchema>) => {
     startTransition(async () => {
       if (isEdit && question) {
+        const result = await editQuestion({
+          questionId: question?._id,
+          ...data,
+        });
+
+        if (result.success) {
+          toast({
+            title: "Success",
+            description: "Question updated successfully",
+          });
+
+          if (result.data)
+            router.push(ROUTES.QUESTION(result.data._id as string));
+        } else {
+          toast({
+            title: `Error ${result.status}`,
+            description: result.error?.message || "Something went wrong",
+            variant: "destructive",
+          });
+        }
+
         return;
       }
 

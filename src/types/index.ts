@@ -76,3 +76,6 @@ export type GetQuestionParams = {
   questionId: string;
 };
 
+export type EditQuestionParams = CreateQuestionParams & {
+  questionId: string;
+};

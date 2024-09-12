@@ -3,10 +3,11 @@ import {
   signInWithCredentials,
   signUpWithCredentials,
 } from "./auth.action";
-import {createQuestion, getQuestion} from "./question.action";
+import {createQuestion, editQuestion, getQuestion} from "./question.action";
 
 export {
   createQuestion,
+  editQuestion,
   getQuestion,
   signInAsGuest,
   signInWithCredentials,

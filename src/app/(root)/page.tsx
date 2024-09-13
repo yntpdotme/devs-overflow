@@ -5,6 +5,7 @@ import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import {RouteParams} from "@/types";
 
 const questions = [
   {
@@ -45,11 +46,7 @@ const questions = [
   },
 ];
 
-type HomeProps = {
-  searchParams: Promise<Record<string, string>>;
-};
-
-const Home = async ({searchParams}: HomeProps) => {
+const Home = async ({searchParams}: RouteParams) => {
   const {q = ""} = await searchParams;
 
   return (

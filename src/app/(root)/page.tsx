@@ -1,17 +1,19 @@
 import Link from "next/link";
 
 import QuestionCard from "@/components/cards/QuestionCard";
+import DataRenderer from "@/components/DataRenderer";
 import HomeFilter from "@/components/filters/HomeFilter";
 import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
+import {EMPTY_QUESTION} from "@/constants/states";
 import {RouteParams} from "@/types";
 
 const questions = [
   {
     _id: "1",
     title: "How to learn React?",
-    description: "I want to learn React, can anyone help me?",
+    content: "I want to learn React, can anyone help me?",
     tags: [
       {_id: "1", name: "React"},
       {_id: "2", name: "JavaScript"},
@@ -29,7 +31,7 @@ const questions = [
   {
     _id: "2",
     title: "How to learn JavaScript?",
-    description: "I want to learn JavaScript, can anyone help me?",
+    content: "I want to learn JavaScript, can anyone help me?",
     tags: [
       {_id: "1", name: "JavaScript"},
       {_id: "2", name: "JS"},
@@ -74,15 +76,22 @@ const Home = async ({searchParams}: RouteParams) => {
 
       <HomeFilter />
 
-      <div className="mt-10 flex w-full flex-col gap-8 px-6 sm:px-12">
-        {questions
-          .filter(question =>
-            question.title.toLowerCase().includes(q?.toLowerCase())
-          )
-          .map(question => (
-            <QuestionCard key={question._id} question={question} />
-          ))}
-      </div>
+      <DataRenderer
+        success={true}
+        data={questions}
+        empty={EMPTY_QUESTION}
+        render={questions => (
+          <div className="mt-10 flex w-full flex-col gap-8 px-6 sm:px-12">
+            {questions
+              .filter(question =>
+                question.title.toLowerCase().includes(q?.toLowerCase())
+              )
+              .map(question => (
+                <QuestionCard key={question._id} question={question} />
+              ))}
+          </div>
+        )}
+      />
     </>
   );
 };

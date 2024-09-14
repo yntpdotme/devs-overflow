@@ -1,6 +1,6 @@
 "use server";
 
-import mongoose from "mongoose";
+import mongoose, {FilterQuery} from "mongoose";
 
 import {Question, Tag, TagQuestion} from "@/database";
 import {QuestionDoc} from "@/database/question.model";
@@ -9,6 +9,7 @@ import {
   AskQuestionSchema,
   EditQuestionSchema,
   GetQuestionSchema,
+  PaginatedSearchParamsSchema,
 } from "@/lib/schemas";
 import {
   ActionResponse,
@@ -16,6 +17,7 @@ import {
   EditQuestionParams,
   ErrorResponse,
   GetQuestionParams,
+  PaginatedSearchParams,
   Question as QuestionType,
 } from "@/types";
 
@@ -210,5 +212,76 @@ export const editQuestion = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session?.endSession();
+  }
+};
+
+export const getQuestions = async (
+  params: PaginatedSearchParams
+): Promise<ActionResponse<{questions: QuestionType[]; isNext: boolean}>> => {
+  const validationResult = await action({
+    params,
+    schema: PaginatedSearchParamsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {page = 1, pageSize = 10, query, filter} = validationResult.params!;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  const filterQuery: FilterQuery<typeof Question> = {};
+  if (query) {
+    filterQuery.$or = [
+      {title: {$regex: new RegExp(query, "i")}},
+      {content: {$regex: new RegExp(query, "i")}},
+    ];
+  }
+
+  if (filter === "recommended") {
+    // TODO: Implement recommended questions logic
+    return {success: true, data: {questions: [], isNext: false}};
+  }
+
+  let sortCriteria = {};
+
+  switch (filter) {
+    case "newest":
+      sortCriteria = {createdAt: -1};
+      break;
+
+    case "unanswered":
+      filterQuery.answers = 0;
+      sortCriteria = {createdAt: -1};
+      break;
+
+    case "popular":
+      sortCriteria = {upvotes: -1};
+      break;
+
+    default:
+      sortCriteria = {createdAt: -1};
+  }
+
+  try {
+    const totalQuestions = await Question.countDocuments(filterQuery);
+
+    const questions = await Question.find(filterQuery)
+      .populate("tags", "name")
+      .populate("author", "name image")
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const isNext = totalQuestions > skip + limit;
+
+    return {
+      success: true,
+      data: {questions: JSON.parse(JSON.stringify(questions)), isNext},
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };

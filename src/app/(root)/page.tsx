@@ -7,49 +7,20 @@ import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
 import {EMPTY_QUESTION} from "@/constants/states";
+import {getQuestions} from "@/lib/actions";
 import {RouteParams} from "@/types";
 
-const questions = [
-  {
-    _id: "1",
-    title: "How to learn React?",
-    content: "I want to learn React, can anyone help me?",
-    tags: [
-      {_id: "1", name: "React"},
-      {_id: "2", name: "JavaScript"},
-    ],
-    author: {
-      _id: "1",
-      name: "John Doe",
-      image: "",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2025-01-29"),
-  },
-  {
-    _id: "2",
-    title: "How to learn JavaScript?",
-    content: "I want to learn JavaScript, can anyone help me?",
-    tags: [
-      {_id: "1", name: "JavaScript"},
-      {_id: "2", name: "JS"},
-    ],
-    author: {
-      _id: "2",
-      name: "John Smith",
-      image: "",
-    },
-    upvotes: 10,
-    answers: 5,
-    views: 100,
-    createdAt: new Date("2024-09-01"),
-  },
-];
-
 const Home = async ({searchParams}: RouteParams) => {
-  const {q = ""} = await searchParams;
+  const {page, pageSize, query, filter} = await searchParams;
+
+  const {success, data, error} = await getQuestions({
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    query: query || "",
+    filter: filter || "",
+  });
+
+  const {questions} = data || {};
 
   return (
     <>
@@ -77,18 +48,15 @@ const Home = async ({searchParams}: RouteParams) => {
       <HomeFilter />
 
       <DataRenderer
-        success={true}
+        success={success}
+        error={error}
         data={questions}
         empty={EMPTY_QUESTION}
         render={questions => (
           <div className="mt-10 flex w-full flex-col gap-8 px-6 sm:px-12">
-            {questions
-              .filter(question =>
-                question.title.toLowerCase().includes(q?.toLowerCase())
-              )
-              .map(question => (
-                <QuestionCard key={question._id} question={question} />
-              ))}
+            {questions.map(question => (
+              <QuestionCard key={question._id} question={question} />
+            ))}
           </div>
         )}
       />

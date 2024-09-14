@@ -79,3 +79,11 @@ export type GetQuestionParams = {
 export type EditQuestionParams = CreateQuestionParams & {
   questionId: string;
 };
+
+export type PaginatedSearchParams = {
+  page?: number;
+  pageSize?: number;
+  query?: string;
+  filter?: string;
+  sort?: string;
+};

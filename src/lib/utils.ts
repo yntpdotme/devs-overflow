@@ -1,6 +1,7 @@
 import {clsx, type ClassValue} from "clsx";
 import {twMerge} from "tailwind-merge";
 
+import {techDescriptionMap} from "@/constants/techDescriptionMap";
 import {techMap} from "@/constants/techMap";
 
 export function cn(...inputs: ClassValue[]) {
@@ -37,4 +38,12 @@ export const getTimeStamp = (createdAt: Date) => {
     }
   }
   return "just now";
+};
+
+export const getTechDescription = (techName: string) => {
+  const normalizedTechName = techName.replace(/[ .]/g, "").toLowerCase();
+
+  return techDescriptionMap[normalizedTechName]
+    ? techDescriptionMap[normalizedTechName]
+    : `${techName} is a technology or tool widely used in development, providing valuable features and capabilities.`;
 };

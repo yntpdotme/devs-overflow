@@ -19,7 +19,13 @@ const generateUniqueUsername = async (
     trim: true,
   });
   const exists = await User.findOne({username}).session(session);
-  if (!exists) return username;
+  if (!exists) {
+    return slugify(username, {
+      lower: true,
+      strict: true,
+      trim: true,
+    });
+  }
 
   let counter = 1;
   while (true) {

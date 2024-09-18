@@ -40,10 +40,10 @@ const HomeFilter = () => {
           key={value}
           onClick={() => handleFilterChange(value)}
           className={cn(
-            "hidden body-medium rounded-lg capitalize shadow-none sm:block",
+            "hidden body-medium rounded-md capitalize shadow-none sm:block px-6",
             selectedFilter === value
               ? "bg-primary-100 text-primary-500 hover:bg-primary-100 dark:bg-dark-400 dark:text-primary-500 dark:hover:bg-dark-400"
-              : "bg-light-800 text-light-500 hover:bg-light-700 dark:bg-dark-300 dark:text-light-500 dark:hover:bg-dark-400"
+              : "bg-light-800 text-dark-400 hover:bg-light-700 dark:bg-dark-300 dark:text-light-700 dark:hover:bg-dark-400"
           )}
         >
           {label}

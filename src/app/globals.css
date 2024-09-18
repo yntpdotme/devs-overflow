@@ -148,6 +148,10 @@ code {
   .background-light900_dark300 {
     @apply bg-light-900 dark:bg-dark-300;
   }
+  
+  .background-light900_darkgradient {
+    @apply bg-light-900 dark:dark-gradient;
+  }
 
   .background-light800_darkgradient {
     @apply bg-light-800 dark:dark-gradient;

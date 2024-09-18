@@ -57,13 +57,13 @@ const StateMessage = ({image, title, message, button}: StateMessageProps) => (
 
     <h2 className="h2-bold text-dark200_light900 mt-8">{title}</h2>
 
-    <p className="body-regular text-dark500_light700 mb-5 mt-3 max-w-md text-center">
+    <p className="body-regular text-dark500_light700 mb-5 mt-3 max-w-sm text-center">
       {message}
     </p>
 
     {button && (
       <Link href={button.href}>
-        <Button className="min-h-[40px] bg-light-800 px-4 py-3 text-light-500 shadow-none hover:bg-light-700 dark:bg-dark-300 dark:text-light-500 dark:hover:bg-dark-400">
+        <Button className="min-h-[40px] rounded-md bg-light-800 px-6 py-3 text-dark-400 shadow-none hover:bg-light-700 dark:bg-dark-300 dark:text-light-700 dark:hover:bg-dark-400">
           {button.text}
         </Button>
       </Link>

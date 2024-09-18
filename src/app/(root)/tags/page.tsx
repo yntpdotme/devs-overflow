@@ -17,7 +17,6 @@ const Tags = async ({searchParams}: RouteParams) => {
   });
 
   const {tags} = data || {};
-  console.log(tags);
 
   return (
     <>

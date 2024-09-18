@@ -71,15 +71,15 @@ const TagCard = ({
   }
 
   return (
-    <Link href={ROUTES.TAG(_id)} className="shadow-light100_darknone">
-      <article className="background-light900_dark200 light-border flex size-full flex-col rounded-xl border px-8 py-10">
+    <Link href={ROUTES.TAG(_id)} className="shadow-light100_dark100">
+      <article className="background-light900_darkgradient light-border flex size-full flex-col rounded-[10px] border px-8 py-10">
         <div className="flex items-center justify-between gap-3">
           <div className="background-light800_dark400 w-fit rounded-md px-5 py-1.5">
             <p className="paragraph-semibold text-dark300_light900">
-              {name.toUpperCase()}
+              {name[0].toUpperCase() + name.slice(1)}
             </p>
           </div>
-          <i className={cn(iconClass, "text-2xl")} aria-hidden="true" />
+          <i className={cn(iconClass, "text-[30px]")} aria-hidden="true" />
         </div>
 
         <p className="small-regular text-dark500_light700 mt-5 line-clamp-3 w-full flex-1">

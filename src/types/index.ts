@@ -87,3 +87,7 @@ export type PaginatedSearchParams = {
   filter?: string;
   sort?: string;
 };
+
+export type GetTagQuestionsParams = Omit<PaginatedSearchParams, "filter"> & {
+  tagId: string;
+};

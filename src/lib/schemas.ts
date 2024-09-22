@@ -178,3 +178,13 @@ export const PaginatedSearchParamsSchema = z.object({
   sort: z.string().optional(),
 });
 
+export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
+  tagId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Tag ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Tag ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid tagId"}),
+});

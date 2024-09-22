@@ -9,13 +9,14 @@ import {
   getQuestion,
   getQuestions,
 } from "./question.action";
-import {getTags} from "./tag.action";
+import {getTagQuestions, getTags} from "./tag.action";
 
 export {
   createQuestion,
   editQuestion,
   getQuestion,
   getQuestions,
+  getTagQuestions,
   getTags,
   signInAsGuest,
   signInWithCredentials,

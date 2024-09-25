@@ -1,3 +1,4 @@
+import {cn} from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -10,6 +11,7 @@ type MetricProps = {
   textStyles: string;
   imgStyles?: string;
   isAuthor?: boolean;
+  titleStyles?: string;
 };
 
 const Metric = ({
@@ -21,6 +23,7 @@ const Metric = ({
   textStyles,
   imgStyles,
   isAuthor,
+  titleStyles,
 }: MetricProps) => {
   const getFirstLetter = (value: string | number): string => {
     const stringValue = value.toString();
@@ -32,8 +35,8 @@ const Metric = ({
       {imgUrl && (
         <Image
           src={imgUrl}
-          width={20}
-          height={20}
+          width={18}
+          height={18}
           alt={alt}
           className={`rounded-full object-contain ${imgStyles ?? ""}`}
         />
@@ -47,11 +50,12 @@ const Metric = ({
 
       <p className={`${textStyles} flex items-center gap-1`}>
         {value}
-        <span
-          className={`small-regular line-clamp-1 ${isAuthor ? "max-sm:hidden" : ""}`}
-        >
-          {title}
-        </span>
+
+        {title ? (
+          <span className={cn(`small-regular line-clamp-1`, titleStyles)}>
+            {title}
+          </span>
+        ) : null}
       </p>
     </>
   );

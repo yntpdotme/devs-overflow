@@ -22,7 +22,7 @@ const QuestionCard = ({question}: QuestionCardProps) => {
         </h3>
       </Link>
 
-      <div className="mt-3.5 flex w-full flex-wrap gap-2">
+      <div className="no-scrollbar mt-3.5 flex w-full gap-2 overflow-y-auto">
         {question.tags.map((tag: Tag) => (
           <TagCard key={tag._id} _id={tag._id} name={tag.name} compact />
         ))}
@@ -36,6 +36,7 @@ const QuestionCard = ({question}: QuestionCardProps) => {
           title={`• asked ${getTimeStamp(question.createdAt)}`}
           href={ROUTES.PROFILE(question.author._id)}
           textStyles="body-medium text-dark400_light700"
+          titleStyles="max-sm:hidden"
           isAuthor
         />
         <div className="flex items-center gap-3 max-sm:flex-wrap max-sm:justify-start">

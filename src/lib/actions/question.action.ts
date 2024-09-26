@@ -9,6 +9,7 @@ import {
   AskQuestionSchema,
   EditQuestionSchema,
   GetQuestionSchema,
+  IncrementViewsSchema,
   PaginatedSearchParamsSchema,
 } from "@/lib/schemas";
 import {
@@ -17,6 +18,7 @@ import {
   EditQuestionParams,
   ErrorResponse,
   GetQuestionParams,
+  IncrementViewsParams,
   PaginatedSearchParams,
   Question as QuestionType,
 } from "@/types";
@@ -279,6 +281,38 @@ export const getQuestions = async (
     return {
       success: true,
       data: {questions: JSON.parse(JSON.stringify(questions)), isNext},
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const incrementViews = async (
+  params: IncrementViewsParams
+): Promise<ActionResponse<{views: number}>> => {
+  const validationResult = await action({
+    params,
+    schema: IncrementViewsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {questionId} = validationResult.params!;
+
+  try {
+    const question = await Question.findById(questionId);
+    if (!question) {
+      throw new Error("Question not found");
+    }
+
+    question.views += 1;
+    await question.save();
+
+    return {
+      success: true,
+      data: {views: question.views},
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

@@ -91,3 +91,7 @@ export type PaginatedSearchParams = {
 export type GetTagQuestionsParams = Omit<PaginatedSearchParams, "filter"> & {
   tagId: string;
 };
+
+export type IncrementViewsParams = {
+  questionId: string;
+};

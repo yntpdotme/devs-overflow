@@ -188,3 +188,14 @@ export const GetTagQuestionsSchema = PaginatedSearchParamsSchema.extend({
     })
     .refine(val => val.length === 24, {message: "Invalid tagId"}),
 });
+
+export const IncrementViewsSchema = z.object({
+  questionId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Question ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Question ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid questionId"}),
+});

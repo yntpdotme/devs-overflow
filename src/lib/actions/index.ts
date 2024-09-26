@@ -8,9 +8,9 @@ import {
   editQuestion,
   getQuestion,
   getQuestions,
+  incrementViews
 } from "./question.action";
 import {getTagQuestions, getTags} from "./tag.action";
-
 export {
   createQuestion,
   editQuestion,
@@ -18,6 +18,7 @@ export {
   getQuestions,
   getTagQuestions,
   getTags,
+  incrementViews,
   signInAsGuest,
   signInWithCredentials,
   signUpWithCredentials,

@@ -1,3 +1,4 @@
+import {createAnswer} from "./answer.action";
 import {
   signInAsGuest,
   signInWithCredentials,
@@ -8,10 +9,12 @@ import {
   editQuestion,
   getQuestion,
   getQuestions,
-  incrementViews
+  incrementViews,
 } from "./question.action";
 import {getTagQuestions, getTags} from "./tag.action";
+
 export {
+  createAnswer,
   createQuestion,
   editQuestion,
   getQuestion,

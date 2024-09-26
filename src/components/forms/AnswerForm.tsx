@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/form";
 import {Skeleton} from "@/components/ui/skeleton";
 import {toast} from "@/hooks/use-toast";
+import {createAnswer} from "@/lib/actions";
 import {SubmitAnswerSchema} from "@/lib/schemas";
 
 const Editor = dynamic(() => import("@/components/editor"), {
@@ -29,7 +30,7 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ),
 });
 
-const AnswerForm = () => {
+const AnswerForm = ({questionId}: {questionId: string}) => {
   const [isPending, startTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
   const editorRef = useRef<MDXEditorMethods>(null);
@@ -44,8 +45,7 @@ const AnswerForm = () => {
 
   const handleSubmit = (data: z.infer<typeof SubmitAnswerSchema>) => {
     startTransition(async () => {
-      const result = {success: true, error: {message: null}};
-      console.log(data);
+      const result = await createAnswer({questionId, content: data.content});
 
       if (result.success) {
         form.reset();
@@ -57,6 +57,16 @@ const AnswerForm = () => {
 
         if (editorRef.current) editorRef.current.setMarkdown("");
       } else {
+        if (result.error?.message === "Unauthorized") {
+          toast({
+            title: "Please log in",
+            description: "You need to be logged in to post answer",
+            variant: "destructive",
+          });
+
+          return;
+        }
+
         toast({
           title: `Error`,
           description: result.error?.message || "Something went wrong",

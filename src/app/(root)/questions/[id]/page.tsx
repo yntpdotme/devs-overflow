@@ -1,5 +1,6 @@
 import Link from "next/link";
 import {notFound} from "next/navigation";
+import {after} from "next/server";
 
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
@@ -7,7 +8,7 @@ import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/Votes";
 import ROUTES from "@/constants/routes";
-import {getQuestion} from "@/lib/actions";
+import {getQuestion, incrementViews} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
@@ -16,6 +17,10 @@ const QuestionDetails = async ({params}: RouteParams) => {
 
   const {success, data: question} = await getQuestion({questionId: id});
   if (!success || !question) return notFound();
+
+  after(async () => {
+    await incrementViews({questionId: id});
+  });
 
   const {author, createdAt, answers, views, tags, content, title} = question;
 

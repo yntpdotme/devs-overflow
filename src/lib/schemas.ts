@@ -209,3 +209,14 @@ export const SubmitAnswerSchema = z.object({
 export const AnswerSchema = SubmitAnswerSchema.extend({
   questionId: z.string().min(1, {message: "Question ID is required."}),
 });
+
+export const GetAnswersSchema = PaginatedSearchParamsSchema.extend({
+  questionId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Question ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Question ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid questionId"}),
+});

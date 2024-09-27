@@ -6,8 +6,14 @@ import ROUTES from "@/constants/routes";
 import {Question} from "@/database";
 import Answer, {AnswerDoc} from "@/database/answer.model";
 import {action, handleError} from "@/lib/handlers";
-import {AnswerSchema} from "@/lib/schemas";
-import {ActionResponse, CreateAnswerParams, ErrorResponse} from "@/types";
+import {AnswerSchema, GetAnswersSchema} from "@/lib/schemas";
+import {
+  ActionResponse,
+  Answer as AnswerType,
+  CreateAnswerParams,
+  ErrorResponse,
+  GetAnswersParams,
+} from "@/types";
 
 export const createAnswer = async (
   params: CreateAnswerParams
@@ -51,5 +57,72 @@ export const createAnswer = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const getAnswers = async (
+  params: GetAnswersParams
+): Promise<
+  ActionResponse<{answers: AnswerType[]; isNext: boolean; totalAnswers: number}>
+> => {
+  const validationResult = await action({
+    params,
+    schema: GetAnswersSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {
+    questionId,
+    page = 1,
+    pageSize = 10,
+    filter,
+  } = validationResult.params!;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  let sortCriteria = {};
+
+  switch (filter) {
+    case "newest":
+      sortCriteria = {createdAt: -1};
+      break;
+
+    case "oldest":
+      sortCriteria = {createdAt: 1};
+      break;
+
+    case "popular":
+      sortCriteria = {upvotes: -1};
+      break;
+
+    default:
+      sortCriteria = {createdAt: -1};
+  }
+
+  try {
+    const totalAnswers = await Answer.countDocuments({question: questionId});
+
+    const answers = await Answer.find({question: questionId})
+      .populate("author", "_id name image")
+      .sort(sortCriteria)
+      .skip(skip)
+      .limit(limit)
+      .lean();
+
+    const isNext = totalAnswers > skip + limit;
+
+    return {
+      success: true,
+      data: {
+        answers: JSON.parse(JSON.stringify(answers)),
+        isNext,
+        totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };

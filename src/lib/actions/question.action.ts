@@ -270,7 +270,7 @@ export const getQuestions = async (
 
     const questions = await Question.find(filterQuery)
       .populate("tags", "name")
-      .populate("author", "name image")
+      .populate("author", "_id name image")
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit)

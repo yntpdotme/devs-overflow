@@ -100,3 +100,14 @@ export type CreateAnswerParams = {
   questionId: string;
   content: string;
 };
+
+export type GetAnswersParams = PaginatedSearchParams & {
+  questionId: string;
+};
+
+export type Answer = {
+  _id: string;
+  author: Author;
+  content: string;
+  createdAt: Date;
+};

@@ -1,4 +1,4 @@
-import {createAnswer} from "./answer.action";
+import {createAnswer, getAnswers} from "./answer.action";
 import {
   signInAsGuest,
   signInWithCredentials,
@@ -17,6 +17,7 @@ export {
   createAnswer,
   createQuestion,
   editQuestion,
+  getAnswers,
   getQuestion,
   getQuestions,
   getTagQuestions,

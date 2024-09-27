@@ -2,6 +2,7 @@ import Link from "next/link";
 import {notFound} from "next/navigation";
 import {after} from "next/server";
 
+import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
@@ -9,7 +10,7 @@ import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/Votes";
 import ROUTES from "@/constants/routes";
-import {getQuestion, incrementViews} from "@/lib/actions";
+import {getAnswers, getQuestion, incrementViews} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
@@ -23,13 +24,37 @@ const QuestionDetails = async ({params}: RouteParams) => {
     await incrementViews({questionId: id});
   });
 
-  const {author, createdAt, answers, views, tags, content, title} = question;
+  const {
+    author,
+    createdAt,
+    answers: totalAnswers,
+    views,
+    tags,
+    content,
+    title,
+  } = question;
+
+  const {
+    success: answersSuccess,
+    data: answersResult,
+    error: answersError,
+  } = await getAnswers({
+    questionId: id,
+    page: 1,
+    pageSize: 10,
+    filter: "newest",
+  });
 
   return (
     <section className="px-6 pt-12 sm:px-12">
-      <div className="flex w-full flex-col-reverse justify-between sm:flex-row">
+      <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-center">
         <div className="flex items-center justify-start gap-2">
-          <UserAvatar id={author._id} name={author.name} className="size-6" />
+          <UserAvatar
+            id={author._id}
+            name={author.name}
+            imageUrl={author.image}
+            className="size-6"
+          />
           <Link href={ROUTES.PROFILE(author._id)}>
             <p className="paragraph-medium text-dark300_light700">
               {author.name}
@@ -55,7 +80,7 @@ const QuestionDetails = async ({params}: RouteParams) => {
         <Metric
           imgUrl="/icons/message.svg"
           alt="message icon"
-          value={answers}
+          value={totalAnswers}
           title=""
           textStyles="small-regular text-dark400_light700"
         />
@@ -79,6 +104,15 @@ const QuestionDetails = async ({params}: RouteParams) => {
             compact
           />
         ))}
+      </div>
+
+      <div className="my-5">
+        <AllAnswers
+          data={answersResult?.answers}
+          success={answersSuccess}
+          error={answersError}
+          totalAnswers={answersResult?.totalAnswers || 0}
+        />
       </div>
 
       <div className="mt-12">

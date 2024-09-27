@@ -1,9 +1,10 @@
+import Link from "next/link";
+
+import Metric from "@/components/Metric";
+import TagCard from "@/components/cards/TagCard";
 import ROUTES from "@/constants/routes";
 import {getTimeStamp} from "@/lib/utils";
 import {Question, Tag} from "@/types";
-import Link from "next/link";
-import Metric from "../Metric";
-import TagCard from "./TagCard";
 
 type QuestionCardProps = {
   question: Question;

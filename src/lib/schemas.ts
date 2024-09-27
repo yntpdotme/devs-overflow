@@ -199,3 +199,9 @@ export const IncrementViewsSchema = z.object({
     })
     .refine(val => val.length === 24, {message: "Invalid questionId"}),
 });
+
+export const SubmitAnswerSchema = z.object({
+  content: z
+    .string()
+    .min(100, {message: "Answer has to have more than 100 characters."}),
+});

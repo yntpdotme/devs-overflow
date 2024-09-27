@@ -11,6 +11,7 @@ import ROUTES from "@/constants/routes";
 import {getQuestion, incrementViews} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
+import AnswerForm from "@/components/forms/AnswerForm";
 
 const QuestionDetails = async ({params}: RouteParams) => {
   const {id} = await params;
@@ -78,6 +79,10 @@ const QuestionDetails = async ({params}: RouteParams) => {
             compact
           />
         ))}
+      </div>
+
+      <div className="mt-12">
+        <AnswerForm/>
       </div>
     </section>
   );

@@ -66,7 +66,6 @@ export const UserSchema = z.object({
     .string()
     .min(3, {message: "Username must be at least 3 characters long."})
     .max(30, {message: "Username cannot exceed 30 characters."}),
-
   email: z.string().email({message: "Please provide a valid email address."}),
   bio: z.string().optional(),
   image: z
@@ -219,4 +218,15 @@ export const GetAnswersSchema = PaginatedSearchParamsSchema.extend({
       invalid_type_error: "Question ID must be a string.",
     })
     .refine(val => val.length === 24, {message: "Invalid questionId"}),
+});
+
+export const AIAnswerSchema = z.object({
+  question: z
+    .string()
+    .min(5, {message: "Question must be at least 5 characters long."})
+    .max(200, {message: "Question cannot exceed 200 characters."}),
+  content: z
+    .string()
+    .min(100, {message: "Answer has to have more than 100 characters."}),
+  userAnswer: z.string().optional(),
 });

@@ -10,6 +10,7 @@
     "format": "npx prettier --write ."
   },
   "dependencies": {
+    "@ai-sdk/openai": "^1.1.13",
     "@hookform/resolvers": "^3.10.0",
     "@mdxeditor/editor": "^3.21.2",
     "@radix-ui/colors": "^3.0.0",
@@ -20,6 +21,7 @@
     "@radix-ui/react-select": "^2.1.5",
     "@radix-ui/react-slot": "^1.1.1",
     "@radix-ui/react-toast": "^1.2.6",
+    "ai": "^4.1.45",
     "bcryptjs": "^2.4.3",
     "bright": "^1.0.0",
     "class-variance-authority": "^0.7.1",

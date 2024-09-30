@@ -4,11 +4,8 @@ import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import {AccountDoc} from "./database/account.model";
-import {UserDoc} from "./database/user.model";
 import {api} from "./lib/api";
 import {SignInSchema} from "./lib/schemas";
-import {ActionResponse} from "./types";
 
 export const {handlers, auth, signIn, signOut} = NextAuth({
   providers: [
@@ -21,14 +18,13 @@ export const {handlers, auth, signIn, signOut} = NextAuth({
         if (success) {
           const {email, password} = data;
 
-          const {data: existingAccount} = (await api.accounts.getByProvider(
-            email
-          )) as ActionResponse<AccountDoc>;
+          const {data: existingAccount} =
+            await api.accounts.getByProvider(email);
           if (!existingAccount || !existingAccount.password) return null;
 
-          const {data: existingUser} = (await api.users.getById(
+          const {data: existingUser} = await api.users.getById(
             existingAccount.userId.toString()
-          )) as ActionResponse<UserDoc>;
+          );
 
           if (!existingUser) return null;
 
@@ -58,11 +54,11 @@ export const {handlers, auth, signIn, signOut} = NextAuth({
     async jwt({token, account}) {
       if (account) {
         const {data: existingAccount, success} =
-          (await api.accounts.getByProvider(
+          await api.accounts.getByProvider(
             account.type === "credentials"
               ? token.email!
               : account.providerAccountId
-          )) as ActionResponse<AccountDoc>;
+          );
 
         if (!success || !existingAccount) return token;
 
@@ -87,11 +83,11 @@ export const {handlers, auth, signIn, signOut} = NextAuth({
             : (user.email!.split("@")[0] as string),
       };
 
-      const {success} = (await api.auth.oAuthSignIn({
+      const {success} = await api.auth.oAuthSignIn({
         user: userInfo,
         provider: account.provider as "github" | "google",
         providerAccountId: account.providerAccountId,
-      })) as ActionResponse;
+      });
 
       if (!success) return false;
 

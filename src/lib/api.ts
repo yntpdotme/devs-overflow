@@ -1,5 +1,5 @@
-import {AccountType} from "@/database/account.model";
-import {UserType} from "@/database/user.model";
+import {AccountDoc, AccountType} from "@/database/account.model";
+import {UserDoc, UserType} from "@/database/user.model";
 import {fetchHandler} from "@/lib/handlers";
 import {SignInWithOAuthParams} from "@/types";
 
@@ -16,7 +16,8 @@ export const api = {
   },
   users: {
     getAll: () => fetchHandler(`${API_BASE_URL}/users`),
-    getById: (id: string) => fetchHandler(`${API_BASE_URL}/users/${id}`),
+    getById: (id: string) =>
+      fetchHandler<UserDoc>(`${API_BASE_URL}/users/${id}`),
     getByEmail: (email: string) =>
       fetchHandler(`${API_BASE_URL}/users/email`, {
         method: "POST",
@@ -39,7 +40,7 @@ export const api = {
     getAll: () => fetchHandler(`${API_BASE_URL}/accounts`),
     getById: (id: string) => fetchHandler(`${API_BASE_URL}/accounts/${id}`),
     getByProvider: (providerAccountId: string) =>
-      fetchHandler(`${API_BASE_URL}/accounts/provider`, {
+      fetchHandler<AccountDoc>(`${API_BASE_URL}/accounts/provider`, {
         method: "POST",
         body: JSON.stringify({providerAccountId}),
       }),
@@ -61,6 +62,7 @@ export const api = {
       fetchHandler<string>(`${API_BASE_URL}/ai/answers`, {
         method: "POST",
         body: JSON.stringify({question, content, userAnswer}),
+        timeout: 100000,
       }),
   },
 };

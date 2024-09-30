@@ -35,13 +35,13 @@ import {Ref} from "react";
 import "@mdxeditor/editor/style.css";
 import "./dark-editor.css";
 
-interface Props {
+type EditorProps = {
   value: string;
   editorRef: Ref<MDXEditorMethods> | null;
   fieldChange: (value: string) => void;
-}
+};
 
-const Editor = ({value, editorRef, fieldChange}: Props) => {
+const Editor = ({value, editorRef, fieldChange}: EditorProps) => {
   const {resolvedTheme} = useTheme();
 
   const themeExtension = resolvedTheme === "dark" ? [basicDark] : [];
@@ -59,7 +59,6 @@ const Editor = ({value, editorRef, fieldChange}: Props) => {
         linkPlugin(),
         linkDialogPlugin(),
         quotePlugin(),
-        markdownShortcutPlugin(),
         tablePlugin(),
         imagePlugin(),
         codeBlockPlugin({defaultCodeBlockLanguage: ""}),
@@ -75,9 +74,11 @@ const Editor = ({value, editorRef, fieldChange}: Props) => {
             json: "json",
             js: "javascript",
             ts: "typescript",
-            "": "unspecified",
             tsx: "TypeScript (React)",
             jsx: "JavaScript (React)",
+            rust: "rust",
+            go: "go",
+            "": "unspecified",
           },
           autoLoadLanguageSupport: true,
           codeMirrorExtensions: themeExtension,
@@ -120,6 +121,7 @@ const Editor = ({value, editorRef, fieldChange}: Props) => {
             />
           ),
         }),
+        markdownShortcutPlugin(),
       ]}
     />
   );

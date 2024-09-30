@@ -42,7 +42,9 @@ export const AskQuestionSchema = z.object({
     .string()
     .min(5, {message: "Title must be at least 5 characters long."})
     .max(100, {message: "Title cannot exceed 100 characters."}),
-  content: z.string().min(1, {message: "Content is required."}),
+  content: z
+    .string()
+    .min(50, {message: "Content has to have more than 50 characters."}),
   tags: z
     .array(
       z
@@ -224,9 +226,11 @@ export const AIAnswerSchema = z.object({
   question: z
     .string()
     .min(5, {message: "Question must be at least 5 characters long."})
-    .max(200, {message: "Question cannot exceed 200 characters."}),
+    .max(100, {message: "Question cannot exceed 100 characters."}),
   content: z
     .string()
-    .min(100, {message: "Answer has to have more than 100 characters."}),
+    .min(50, {
+      message: "Question content has to have more than 50 characters.",
+    }),
   userAnswer: z.string().optional(),
 });

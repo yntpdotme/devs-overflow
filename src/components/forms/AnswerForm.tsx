@@ -3,6 +3,7 @@
 import {zodResolver} from "@hookform/resolvers/zod";
 import {MDXEditorMethods} from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+import {useSession} from "next-auth/react";
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import {useRef, useState, useTransition} from "react";
@@ -21,6 +22,7 @@ import {
 import {Skeleton} from "@/components/ui/skeleton";
 import {toast} from "@/hooks/use-toast";
 import {createAnswer} from "@/lib/actions";
+import {api} from "@/lib/api";
 import {SubmitAnswerSchema} from "@/lib/schemas";
 
 const Editor = dynamic(() => import("@/components/editor"), {
@@ -30,10 +32,21 @@ const Editor = dynamic(() => import("@/components/editor"), {
   ),
 });
 
-const AnswerForm = ({questionId}: {questionId: string}) => {
+type AnswerFormProps = {
+  questionId: string;
+  questionTitle: string;
+  questionContent: string;
+};
+
+const AnswerForm = ({
+  questionId,
+  questionTitle,
+  questionContent,
+}: AnswerFormProps) => {
   const [isPending, startTransition] = useTransition();
   const [isAISubmitting, setIsAISubmitting] = useState(false);
   const editorRef = useRef<MDXEditorMethods>(null);
+  const session = useSession();
 
   const form = useForm<z.infer<typeof SubmitAnswerSchema>>({
     resolver: zodResolver(SubmitAnswerSchema),
@@ -68,12 +81,66 @@ const AnswerForm = ({questionId}: {questionId: string}) => {
         }
 
         toast({
-          title: `Error`,
+          title: `Error ${result.status}`,
           description: result.error?.message || "Something went wrong",
           variant: "destructive",
         });
       }
     });
+  };
+
+  const generateAIAnswer = async () => {
+    if (session.status !== "authenticated") {
+      return toast({
+        title: "Please log in",
+        description: "You need to be logged in to use this feature",
+      });
+    }
+
+    setIsAISubmitting(true);
+
+    const userAnswer = editorRef.current?.getMarkdown();
+
+    try {
+      const {success, data, error} = await api.ai.getAnswer(
+        questionTitle,
+        questionContent,
+        userAnswer
+      );
+
+      if (!success || !data) {
+        return toast({
+          title: `Error`,
+          description: error?.message || "Something went wrong",
+          variant: "destructive",
+        });
+      }
+
+      const formattedAnswer = data.replace(/<br>/g, " ").toString().trim();
+
+      if (editorRef.current) {
+        editorRef.current.setMarkdown(formattedAnswer);
+
+        form.setValue("content", formattedAnswer);
+        form.trigger("content");
+      }
+
+      toast({
+        title: "Success",
+        description: "AI generated answer has been generated",
+      });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description:
+          error instanceof Error
+            ? error.message
+            : "There was a problem with your request",
+        variant: "destructive",
+      });
+    } finally {
+      setIsAISubmitting(false);
+    }
   };
 
   return (
@@ -84,6 +151,7 @@ const AnswerForm = ({questionId}: {questionId: string}) => {
         </h4>
         <Button
           className="min-h-[40px] border border-primary-500/5 bg-primary-100 text-primary-500 shadow-none hover:bg-primary-100 dark:border-none dark:bg-dark-300 dark:text-primary-500 dark:hover:bg-dark-400"
+          onClick={generateAIAnswer}
           disabled={isAISubmitting}
         >
           {isAISubmitting ? (

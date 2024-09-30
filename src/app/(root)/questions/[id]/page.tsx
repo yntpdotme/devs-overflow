@@ -116,7 +116,11 @@ const QuestionDetails = async ({params}: RouteParams) => {
       </div>
 
       <div className="mt-12">
-        <AnswerForm questionId={question._id} />
+        <AnswerForm
+          questionId={question._id}
+          questionTitle={question.title}
+          questionContent={question.content}
+        />
       </div>
     </section>
   );

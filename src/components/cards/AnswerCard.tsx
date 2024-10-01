@@ -2,11 +2,19 @@ import Link from "next/link";
 
 import Preview from "@/components/editor/Preview";
 import UserAvatar from "@/components/UserAvatar";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import {getTimeStamp} from "@/lib/utils";
 import {Answer} from "@/types";
 
-const AnswerCard = ({_id, author, content, createdAt}: Answer) => {
+const AnswerCard = ({
+  _id,
+  author,
+  content,
+  createdAt,
+  upvotes,
+  downvotes,
+}: Answer) => {
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -35,7 +43,14 @@ const AnswerCard = ({_id, author, content, createdAt}: Answer) => {
           </Link>
         </div>
 
-        <div className="flex justify-end">Votes</div>
+        <div className="flex justify-end">
+          <Votes
+            upvotes={upvotes}
+            downvotes={downvotes}
+            hasupVoted={false}
+            hasdownVoted={true}
+          />
+        </div>
       </div>
 
       <Preview content={content} />

@@ -8,7 +8,7 @@ import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
-import Votes from "@/components/Votes";
+import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
 import {getAnswers, getQuestion, incrementViews} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
@@ -62,7 +62,12 @@ const QuestionDetails = async ({params}: RouteParams) => {
           </Link>
         </div>
         <div className="flex justify-end">
-          <Votes />
+          <Votes
+            upvotes={question.upvotes}
+            downvotes={question.downvotes}
+            hasupVoted={true}
+            hasdownVoted={false}
+          />
         </div>
       </div>
 

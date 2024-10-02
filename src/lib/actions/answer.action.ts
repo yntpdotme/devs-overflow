@@ -27,6 +27,7 @@ export const createAnswer = async (
   if (validationResult instanceof Error) {
     return handleError(validationResult) as ErrorResponse;
   }
+
   const {content, questionId} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 

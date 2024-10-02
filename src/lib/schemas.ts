@@ -227,10 +227,27 @@ export const AIAnswerSchema = z.object({
     .string()
     .min(5, {message: "Question must be at least 5 characters long."})
     .max(100, {message: "Question cannot exceed 100 characters."}),
-  content: z
-    .string()
-    .min(50, {
-      message: "Question content has to have more than 50 characters.",
-    }),
+  content: z.string().min(50, {
+    message: "Question content has to have more than 50 characters.",
+  }),
   userAnswer: z.string().optional(),
+});
+
+export const CreateVoteSchema = z.object({
+  actionId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Action ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Action ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid actionId"}),
+  actionType: z.enum(["question", "answer"], {
+    message: "Invalid action type.",
+  }),
+  voteType: z.enum(["upvote", "downvote"], {message: "Invalid vote type."}),
+});
+
+export const UpdateVoteCountSchema = CreateVoteSchema.extend({
+  change: z.number().int().min(-1).max(1),
 });

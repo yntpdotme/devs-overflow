@@ -114,3 +114,13 @@ export type Answer = {
   upvotes: number;
   downvotes: number;
 };
+
+export type CreateVoteParams = {
+  actionId: string;
+  actionType: "question" | "answer";
+  voteType: "upvote" | "downvote";
+};
+
+export type UpdateVoteCountParams = CreateVoteParams & {
+  change: 1 | -1;
+};

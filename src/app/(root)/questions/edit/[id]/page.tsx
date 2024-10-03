@@ -17,7 +17,7 @@ const EditQuestion = async ({params}: RouteParams) => {
   if (!success) return notFound;
 
   return (
-    <section className="px-6 pt-10 sm:px-12 lg:pt-12">
+    <section className="px-6 pt-10 sm:px-12 lg:pt-16">
       <h1 className="h1-bold text-dark100_light900">Edit Question</h1>
 
       <div className="mt-8 sm:mt-10">

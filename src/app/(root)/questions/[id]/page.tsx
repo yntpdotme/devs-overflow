@@ -46,7 +46,7 @@ const QuestionDetails = async ({params}: RouteParams) => {
   });
 
   return (
-    <section className="px-6 pt-12 sm:px-12">
+    <section className="px-6 pt-12 sm:px-12 lg:pt-[80px]">
       <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-center">
         <div className="flex items-center justify-start gap-2">
           <UserAvatar

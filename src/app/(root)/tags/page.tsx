@@ -20,7 +20,7 @@ const Tags = async ({searchParams}: RouteParams) => {
 
   return (
     <>
-      <h1 className="h1-bold text-dark100_light900 px-6 pt-10 sm:px-12 lg:pt-12">
+      <h1 className="h1-bold text-dark100_light900 px-6 pt-10 sm:px-12 lg:pt-16">
         Tags
       </h1>
 

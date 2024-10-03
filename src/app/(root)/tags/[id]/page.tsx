@@ -21,7 +21,7 @@ const Tag = async ({params, searchParams}: RouteParams) => {
 
   return (
     <>
-      <h1 className="h1-bold text-dark100_light900 px-6 pt-10 sm:px-12 lg:pt-12">
+      <h1 className="h1-bold text-dark100_light900 px-6 pt-10 sm:px-12 lg:pt-16">
         {tag?.name ? tag.name[0].toUpperCase() + tag.name.slice(1) : ""}
       </h1>
 

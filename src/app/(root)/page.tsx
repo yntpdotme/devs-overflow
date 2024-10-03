@@ -24,7 +24,7 @@ const Home = async ({searchParams}: RouteParams) => {
 
   return (
     <>
-      <section className="flex flex-col-reverse justify-between gap-4 px-6 pt-10 sm:flex-row sm:items-center sm:px-12 lg:pt-12">
+      <section className="flex flex-col-reverse justify-between gap-4 px-6 pt-10 sm:flex-row sm:items-center sm:px-12 lg:pt-16">
         <h1 className="h1-bold text-dark100_light900">All Questions</h1>
 
         <Button

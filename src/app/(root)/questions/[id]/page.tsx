@@ -65,8 +65,8 @@ const QuestionDetails = async ({params}: RouteParams) => {
           <Votes
             upvotes={question.upvotes}
             downvotes={question.downvotes}
-            hasupVoted={true}
-            hasdownVoted={false}
+            hasUpVoted={true}
+            hasDownVoted={false}
           />
         </div>
       </div>

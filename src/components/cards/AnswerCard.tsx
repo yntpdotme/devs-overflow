@@ -47,8 +47,8 @@ const AnswerCard = ({
           <Votes
             upvotes={upvotes}
             downvotes={downvotes}
-            hasupVoted={false}
-            hasdownVoted={true}
+            hasUpVoted={false}
+            hasDownVoted={true}
           />
         </div>
       </div>

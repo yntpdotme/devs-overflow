@@ -4,11 +4,17 @@ import mongoose, {ClientSession} from "mongoose";
 
 import {Answer, Question, Vote} from "@/database";
 import {action, handleError} from "@/lib/handlers";
-import {CreateVoteSchema, UpdateVoteCountSchema} from "@/lib/schemas";
+import {
+  CreateVoteSchema,
+  HasVotedSchema,
+  UpdateVoteCountSchema,
+} from "@/lib/schemas";
 import {
   ActionResponse,
   CreateVoteParams,
   ErrorResponse,
+  HasVotedParams,
+  HasVotedResponse,
   UpdateVoteCountParams,
 } from "@/types";
 
@@ -99,7 +105,9 @@ export const createVote = async (
         );
       }
     } else {
-      await Vote.create([{author: userId ,actionId, actionType, voteType}], {session});
+      await Vote.create([{author: userId, actionId, actionType, voteType}], {
+        session,
+      });
 
       await updateVoteCount(
         {actionId, actionType, voteType, change: 1},
@@ -116,5 +124,50 @@ export const createVote = async (
     return handleError(error) as ErrorResponse;
   } finally {
     session.endSession();
+  }
+};
+
+export const hasVoted = async (
+  params: HasVotedParams
+): Promise<ActionResponse<HasVotedResponse>> => {
+  const validationResult = await action({
+    params,
+    schema: HasVotedSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {actionId, actionType} = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  try {
+    const vote = await Vote.findOne({
+      author: userId,
+      actionId,
+      actionType,
+    });
+
+    if (!vote) {
+      return {
+        success: false,
+        data: {
+          hasUpVoted: false,
+          hasDownVoted: false,
+        },
+      };
+    }
+
+    return {
+      success: true,
+      data: {
+        hasUpVoted: vote.voteType === "upvote",
+        hasDownVoted: vote.voteType === "downvote",
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
   }
 };

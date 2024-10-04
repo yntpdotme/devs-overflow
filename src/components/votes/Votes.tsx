@@ -10,15 +10,15 @@ import {useSession} from "next-auth/react";
 type VotesProps = {
   upvotes: number;
   downvotes: number;
-  hasupVoted?: boolean;
-  hasdownVoted?: boolean;
+  hasUpVoted?: boolean;
+  hasDownVoted?: boolean;
 };
 
 const Votes = ({
   upvotes,
   downvotes,
-  hasupVoted = false,
-  hasdownVoted = false,
+  hasUpVoted = false,
+  hasDownVoted = false,
 }: VotesProps) => {
   const [isPending, startTransition] = useTransition();
 
@@ -37,8 +37,8 @@ const Votes = ({
       try {
         const successMessage =
           voteType === "upvote"
-            ? `Upvote ${!hasupVoted ? "added" : "removed"} successfully`
-            : `Downvote ${!hasdownVoted ? "added" : "removed"} successfully`;
+            ? `Upvote ${!hasUpVoted ? "added" : "removed"} successfully`
+            : `Downvote ${!hasDownVoted ? "added" : "removed"} successfully`;
 
         toast({
           title: successMessage,
@@ -59,8 +59,8 @@ const Votes = ({
     <div className="flex-center gap-2.5">
       <div className="flex-center gap-1.5">
         <Image
-          src={hasupVoted ? "/icons/upvoted.svg" : "/icons/upvote.svg"}
-          alt={hasupVoted ? "upvoted" : "upvote"}
+          src={hasUpVoted ? "/icons/upvoted.svg" : "/icons/upvote.svg"}
+          alt={hasUpVoted ? "upvoted" : "upvote"}
           width={20}
           height={20}
           quality={100}
@@ -78,8 +78,8 @@ const Votes = ({
 
       <div className="flex-center gap-1.5">
         <Image
-          src={hasdownVoted ? "/icons/downvoted.svg" : "/icons/downvote.svg"}
-          alt={hasdownVoted ? "downvoted" : "downvote"}
+          src={hasDownVoted ? "/icons/downvoted.svg" : "/icons/downvote.svg"}
+          alt={hasDownVoted ? "downvoted" : "downvote"}
           width={20}
           height={20}
           quality={100}

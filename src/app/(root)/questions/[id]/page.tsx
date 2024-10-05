@@ -1,6 +1,7 @@
 import Link from "next/link";
 import {notFound} from "next/navigation";
 import {after} from "next/server";
+import {Suspense} from "react";
 
 import AllAnswers from "@/components/answers/AllAnswers";
 import TagCard from "@/components/cards/TagCard";
@@ -10,7 +11,7 @@ import Metric from "@/components/Metric";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
-import {getAnswers, getQuestion, incrementViews} from "@/lib/actions";
+import {getAnswers, getQuestion, hasVoted, incrementViews} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
@@ -45,6 +46,11 @@ const QuestionDetails = async ({params}: RouteParams) => {
     filter: "newest",
   });
 
+  const hasVotedPromise = hasVoted({
+    actionId: question._id,
+    actionType: "question",
+  });
+
   return (
     <section className="px-6 pt-12 sm:px-12 lg:pt-[80px]">
       <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-center">
@@ -62,12 +68,15 @@ const QuestionDetails = async ({params}: RouteParams) => {
           </Link>
         </div>
         <div className="flex justify-end">
-          <Votes
-            upvotes={question.upvotes}
-            downvotes={question.downvotes}
-            hasUpVoted={true}
-            hasDownVoted={false}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Votes
+              actionType="question"
+              actionId={question._id}
+              upvotes={question.upvotes}
+              downvotes={question.downvotes}
+              hasVotedPromise={hasVotedPromise}
+            />
+          </Suspense>
         </div>
       </div>
 
@@ -121,7 +130,7 @@ const QuestionDetails = async ({params}: RouteParams) => {
       </div>
 
       <div className="mt-12">
-        <AnswerForm
+      <AnswerForm
           questionId={question._id}
           questionTitle={question.title}
           questionContent={question.content}

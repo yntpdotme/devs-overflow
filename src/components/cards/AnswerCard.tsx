@@ -4,6 +4,7 @@ import Preview from "@/components/editor/Preview";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
+import {hasVoted} from "@/lib/actions";
 import {getTimeStamp} from "@/lib/utils";
 import {Answer} from "@/types";
 
@@ -15,6 +16,11 @@ const AnswerCard = ({
   upvotes,
   downvotes,
 }: Answer) => {
+  const hasVotedPromise = hasVoted({
+    actionId: _id,
+    actionType: "answer",
+  });
+
   return (
     <article className="light-border border-b py-10">
       <span id={JSON.stringify(_id)} className="hash-span" />
@@ -45,10 +51,11 @@ const AnswerCard = ({
 
         <div className="flex justify-end">
           <Votes
+            actionType="answer"
+            actionId={_id}
             upvotes={upvotes}
             downvotes={downvotes}
-            hasUpVoted={false}
-            hasDownVoted={true}
+            hasVotedPromise={hasVotedPromise}
           />
         </div>
       </div>

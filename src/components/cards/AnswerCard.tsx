@@ -7,6 +7,7 @@ import ROUTES from "@/constants/routes";
 import {hasVoted} from "@/lib/actions";
 import {getTimeStamp} from "@/lib/utils";
 import {Answer} from "@/types";
+import {Suspense} from "react";
 
 const AnswerCard = ({
   _id,
@@ -50,13 +51,15 @@ const AnswerCard = ({
         </div>
 
         <div className="flex justify-end">
-          <Votes
-            actionType="answer"
-            actionId={_id}
-            upvotes={upvotes}
-            downvotes={downvotes}
-            hasVotedPromise={hasVotedPromise}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Votes
+              actionType="answer"
+              actionId={_id}
+              upvotes={upvotes}
+              downvotes={downvotes}
+              hasVotedPromise={hasVotedPromise}
+            />
+          </Suspense>
         </div>
       </div>
 

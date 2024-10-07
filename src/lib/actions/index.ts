@@ -4,6 +4,7 @@ import {
   signInWithCredentials,
   signUpWithCredentials,
 } from "./auth.action";
+import {toggleSaveQuestion} from "./collection.action";
 import {
   createQuestion,
   editQuestion,
@@ -29,5 +30,6 @@ export {
   signInAsGuest,
   signInWithCredentials,
   signUpWithCredentials,
+  toggleSaveQuestion,
   updateVoteCount,
 };

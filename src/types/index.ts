@@ -131,3 +131,7 @@ export type HasVotedResponse = {
   hasUpVoted: boolean;
   hasDownVoted: boolean
 }
+
+export type CollectionBaseParams = {
+  questionId: string;
+}

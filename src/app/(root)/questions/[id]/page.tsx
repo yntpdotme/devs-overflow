@@ -8,10 +8,17 @@ import TagCard from "@/components/cards/TagCard";
 import Preview from "@/components/editor/Preview";
 import AnswerForm from "@/components/forms/AnswerForm";
 import Metric from "@/components/Metric";
+import SaveQuestion from "@/components/questions/SaveQuestion";
 import UserAvatar from "@/components/UserAvatar";
 import Votes from "@/components/votes/Votes";
 import ROUTES from "@/constants/routes";
-import {getAnswers, getQuestion, hasVoted, incrementViews} from "@/lib/actions";
+import {
+  getAnswers,
+  getQuestion,
+  hasSavedQuestion,
+  hasVoted,
+  incrementViews,
+} from "@/lib/actions";
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
@@ -51,6 +58,10 @@ const QuestionDetails = async ({params}: RouteParams) => {
     actionType: "question",
   });
 
+  const hasSavedQuestionPromise = hasSavedQuestion({
+    questionId: question._id,
+  });
+
   return (
     <section className="px-6 pt-12 sm:px-12 lg:pt-[80px]">
       <div className="flex w-full flex-col-reverse justify-between sm:flex-row sm:items-center">
@@ -67,7 +78,7 @@ const QuestionDetails = async ({params}: RouteParams) => {
             </p>
           </Link>
         </div>
-        <div className="flex justify-end">
+        <div className="flex justify-end items-center gap-4">
           <Suspense fallback={<div>Loading...</div>}>
             <Votes
               actionType="question"
@@ -75,6 +86,13 @@ const QuestionDetails = async ({params}: RouteParams) => {
               upvotes={question.upvotes}
               downvotes={question.downvotes}
               hasVotedPromise={hasVotedPromise}
+            />
+          </Suspense>
+
+          <Suspense fallback={<div>Loading...</div>}>
+            <SaveQuestion
+              questionId={question._id}
+              hasSavedQuestionPromise={hasSavedQuestionPromise}
             />
           </Suspense>
         </div>
@@ -130,7 +148,7 @@ const QuestionDetails = async ({params}: RouteParams) => {
       </div>
 
       <div className="mt-12">
-      <AnswerForm
+        <AnswerForm
           questionId={question._id}
           questionTitle={question.title}
           questionContent={question.content}

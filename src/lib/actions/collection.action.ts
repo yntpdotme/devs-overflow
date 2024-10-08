@@ -35,6 +35,8 @@ export const toggleSaveQuestion = async (
     if (collection) {
       await Collection.findByIdAndDelete(collection._id);
 
+      revalidatePath(ROUTES.QUESTION(questionId));
+
       return {
         success: true,
         data: {

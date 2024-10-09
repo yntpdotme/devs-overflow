@@ -4,7 +4,11 @@ import {
   signInWithCredentials,
   signUpWithCredentials,
 } from "./auth.action";
-import {hasSavedQuestion, toggleSaveQuestion} from "./collection.action";
+import {
+  getSavedQuestions,
+  hasSavedQuestion,
+  toggleSaveQuestion,
+} from "./collection.action";
 import {
   createQuestion,
   editQuestion,
@@ -23,6 +27,7 @@ export {
   getAnswers,
   getQuestion,
   getQuestions,
+  getSavedQuestions,
   getTagQuestions,
   getTags,
   hasSavedQuestion,

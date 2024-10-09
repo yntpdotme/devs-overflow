@@ -125,13 +125,19 @@ export type UpdateVoteCountParams = CreateVoteParams & {
   change: 1 | -1;
 };
 
-export type HasVotedParams = Pick<CreateVoteParams, "actionId" | "actionType">
+export type HasVotedParams = Pick<CreateVoteParams, "actionId" | "actionType">;
 
 export type HasVotedResponse = {
   hasUpVoted: boolean;
-  hasDownVoted: boolean
-}
+  hasDownVoted: boolean;
+};
 
 export type CollectionBaseParams = {
   questionId: string;
-}
+};
+
+export type Collection = {
+  _id: string;
+  author: string | Author;
+  question: Question;
+};

@@ -2,12 +2,12 @@ import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import LocalSearch from "@/components/search/LocalSearch";
 import ROUTES from "@/constants/routes";
-import {EMPTY_QUESTION} from "@/constants/states";
+import {EMPTY_COLLECTIONS} from "@/constants/states";
 import {getSavedQuestions} from "@/lib/actions";
 import {RouteParams} from "@/types";
 
 const Collections = async ({searchParams}: RouteParams) => {
-  const {page, pageSize, q:query, filter} = await searchParams;
+  const {page, pageSize, q: query, filter} = await searchParams;
 
   const {success, data, error} = await getSavedQuestions({
     page: Number(page) || 1,
@@ -36,7 +36,7 @@ const Collections = async ({searchParams}: RouteParams) => {
         success={success}
         error={error}
         data={collection}
-        empty={EMPTY_QUESTION}
+        empty={EMPTY_COLLECTIONS}
         render={collection => (
           <div className="mt-10 flex w-full flex-col gap-8 px-6 sm:px-12">
             {collection.map(item => (

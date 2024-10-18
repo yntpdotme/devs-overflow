@@ -32,6 +32,7 @@ export const getUsers = async (
   if (query) {
     filterQuery.$or = [
       {name: {$regex: new RegExp(query, "i")}},
+      {username: {$regex: new RegExp(query, "i")}},
       {email: {$regex: new RegExp(query, "i")}},
     ];
   }

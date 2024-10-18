@@ -148,7 +148,9 @@ export type User = {
   username: string;
   email: string;
   bio?: string;
+  image?: string;
   location?: string;
   portfolio?: string;
   reputation?: number;
+  createdAt: Date;
 };

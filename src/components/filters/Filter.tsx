@@ -10,21 +10,31 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {FilterOption} from "@/constants/filter";
 import {formUrlQuery, removeKeysFromUrlQuery} from "@/lib/url";
 import {cn} from "@/lib/utils";
 
-type FilterProps = {
-  filters: FilterOption[];
-  otherClasses?: string;
-  containerClasses?: string;
+type Filter = {
+  name: string;
+  value: string;
 };
 
-const Filter = ({filters, otherClasses, containerClasses}: FilterProps) => {
+type FilterProps = {
+  filters: Filter[];
+  otherClasses?: string;
+  containerClasses?: string;
+  defaultOptionName?: string;
+};
+
+const Filter = ({
+  filters,
+  otherClasses = "",
+  containerClasses = "",
+  defaultOptionName = "All",
+}: FilterProps) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const paramFilter = searchParams.get("filter");
-  filters = [{label: "All Questions", value: "all"}, ...filters];
+  filters = [{name: defaultOptionName, value: "all"}, ...filters];
 
   const handleUpdateParams = (value: string) => {
     const newUrl =
@@ -38,18 +48,19 @@ const Filter = ({filters, otherClasses, containerClasses}: FilterProps) => {
             key: "filter",
             value,
           });
+
     router.push(newUrl, {scroll: false});
   };
 
   return (
-    <div className={`relative ${containerClasses}`}>
+    <div className={cn("relative", containerClasses)}>
       <Select
         onValueChange={handleUpdateParams}
         defaultValue={paramFilter || undefined}
       >
         <SelectTrigger
           className={cn(
-            "paragraph-medium rounded-lg shadow-none border-none px-5 py-4 text-dark-400 dark:text-light-700 flex gap-2 justify-between ring-transparent !ring-0 background-light800_darkgradient",
+            "paragraph-medium rounded-lg no-focus shadow-none border-none px-5 py-4 text-dark-400 dark:text-light-700 flex gap-2 justify-between ring-transparent !ring-0 background-light800_darkgradient",
             otherClasses
           )}
         >
@@ -72,7 +83,7 @@ const Filter = ({filters, otherClasses, containerClasses}: FilterProps) => {
                     : "hover:bg-light-800 dark:hover:bg-dark-300"
                 )}
               >
-                {item.label}
+                {item.name}
               </SelectItem>
             ))}
           </SelectGroup>

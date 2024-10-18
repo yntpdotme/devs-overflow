@@ -4,7 +4,7 @@ import {useRouter, useSearchParams} from "next/navigation";
 import {useState} from "react";
 
 import {Button} from "@/components/ui/button";
-import {questionFilters} from "@/constants/filter";
+import {HomePageFilters} from "@/constants/filters";
 import {formUrlQuery, removeKeysFromUrlQuery} from "@/lib/url";
 import {cn} from "@/lib/utils";
 import Filter from "./Filter";
@@ -35,7 +35,7 @@ const HomeFilter = () => {
 
   return (
     <div className="mt-10 flex gap-4 px-6 sm:px-12">
-      {questionFilters.map(({label, value}) => (
+      {HomePageFilters.map(({name, value}) => (
         <Button
           key={value}
           onClick={() => handleFilterChange(value)}
@@ -46,14 +46,15 @@ const HomeFilter = () => {
               : "bg-light-800 text-dark-400 hover:bg-light-700 dark:bg-dark-300 dark:text-light-700 dark:hover:bg-dark-400"
           )}
         >
-          {label}
+          {name}
         </Button>
       ))}
 
       <Filter
-        filters={questionFilters}
+        filters={HomePageFilters}
         containerClasses="w-full sm:hidden"
         otherClasses="min-h-[45px]"
+        defaultOptionName="All Questions"
       />
     </div>
   );

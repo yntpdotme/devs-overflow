@@ -50,7 +50,7 @@ export const EMPTY_COLLECTIONS = {
     "Looks like you haven't created any collections yet. Start curating something extraordinary today",
   button: {
     text: "Save to Collection",
-    href: ROUTES.COLLECTION,
+    href: ROUTES.HOME,
   },
 };
 

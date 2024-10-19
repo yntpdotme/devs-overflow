@@ -22,8 +22,9 @@ import {
 import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
-const QuestionDetails = async ({params}: RouteParams) => {
-  const {id} = await params;
+const QuestionDetails = async ({params, searchParams}: RouteParams) => {
+  const { id } = await params;
+  const { page, pageSize, filter } = await searchParams;
 
   const {success, data: question} = await getQuestion({questionId: id});
   if (!success || !question) return notFound();
@@ -48,9 +49,9 @@ const QuestionDetails = async ({params}: RouteParams) => {
     error: answersError,
   } = await getAnswers({
     questionId: id,
-    page: 1,
-    pageSize: 10,
-    filter: "newest",
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 10,
+    filter,
   });
 
   const hasVotedPromise = hasVoted({

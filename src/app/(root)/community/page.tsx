@@ -1,6 +1,8 @@
 import UserCard from "@/components/cards/UserCard";
 import DataRenderer from "@/components/DataRenderer";
+import Filter from "@/components/filters/Filter";
 import LocalSearch from "@/components/search/LocalSearch";
+import { UserFilters } from "@/constants/filters";
 import ROUTES from "@/constants/routes";
 import { EMPTY_USERS } from "@/constants/states";
 import {getUsers} from "@/lib/actions";
@@ -24,11 +26,17 @@ const Community = async ({searchParams}: RouteParams) => {
         <h1 className="h1-bold text-dark100_light900">All Users</h1>
       </section>
 
-      <section className="mt-8 px-6 sm:mt-10 sm:px-12">
+
+      <section className="mt-8 px-6 sm:mt-10 sm:px-12 flex max-sm:flex-col gap-8">
         <LocalSearch
           route={ROUTES.COMMUNITY}
-          placeholder="Search for users here..."
+          placeholder="There are some great devs here..."
           otherClasses="flex-1"
+        />
+
+        <Filter
+          filters={UserFilters}
+          otherClasses="min-h-[48px] sm:h-full sm:min-w-[180px]"
         />
       </section>
 

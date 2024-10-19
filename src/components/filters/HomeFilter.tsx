@@ -34,7 +34,7 @@ const HomeFilter = () => {
   };
 
   return (
-    <div className="mt-10 flex gap-4 px-6 sm:px-12">
+    <div className="max-sm:mt-8 mt-10 flex gap-4 px-6 sm:px-12">
       {HomePageFilters.map(({name, value}) => (
         <Button
           key={value}
@@ -53,7 +53,7 @@ const HomeFilter = () => {
       <Filter
         filters={HomePageFilters}
         containerClasses="w-full sm:hidden"
-        otherClasses="min-h-[45px]"
+        otherClasses="min-h-[48px]"
         defaultOptionName="All Questions"
       />
     </div>

@@ -94,7 +94,13 @@ export const getTagQuestions = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const {tagId, page = 1, pageSize = 10, query} = validationResult.params!;
+  const {
+    tagId,
+    page = 1,
+    pageSize = 10,
+    query,
+    filter,
+  } = validationResult.params!;
   const skip = (Number(page) - 1) * pageSize;
   const limit = Number(pageSize);
 
@@ -107,14 +113,30 @@ export const getTagQuestions = async (
     };
 
     if (query) {
-      filterQuery.title = {$regex: new RegExp(query, "i")};
+      filterQuery.$or = [
+        {title: {$regex: new RegExp(query, "i")}},
+        {content: {$regex: new RegExp(query, "i")}},
+      ];
     }
+
+    const sortOptions: Record<string, Record<string, 1 | -1>> = {
+      mostrecent: {"createdAt": -1},
+      oldest: {"createdAt": 1},
+      mostvoted: {"upvotes": -1},
+      mostviewed: {"views": -1},
+      mostanswered: {"answers": -1},
+    };
+
+    const sortCriteria = sortOptions[filter as keyof typeof sortOptions] || {
+      "createdAt": -1,
+    };
 
     const totalQuestions = await Question.countDocuments(filterQuery);
     const questions = await Question.find(filterQuery)
       .select("_id title views answers upvotes downvotes author createdAt")
       .populate("tags", "name")
       .populate("author", "name image")
+      .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
       .lean();

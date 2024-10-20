@@ -1,10 +1,11 @@
 import UserCard from "@/components/cards/UserCard";
 import DataRenderer from "@/components/DataRenderer";
 import Filter from "@/components/filters/Filter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
-import { UserFilters } from "@/constants/filters";
+import {UserFilters} from "@/constants/filters";
 import ROUTES from "@/constants/routes";
-import { EMPTY_USERS } from "@/constants/states";
+import {EMPTY_USERS} from "@/constants/states";
 import {getUsers} from "@/lib/actions";
 import {RouteParams} from "@/types";
 
@@ -18,14 +19,13 @@ const Community = async ({searchParams}: RouteParams) => {
     filter: filter || "",
   });
 
-  const {users} = data || {};
+  const {users, isNext} = data || {};
 
   return (
     <>
       <section className="flex flex-col gap-8 px-6 pt-10 sm:px-12 lg:pt-16">
         <h1 className="h1-bold text-dark100_light900">All Users</h1>
       </section>
-
 
       <section className="mt-8 px-6 sm:mt-10 sm:px-12 flex max-sm:flex-col gap-8">
         <LocalSearch
@@ -53,6 +53,8 @@ const Community = async ({searchParams}: RouteParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

@@ -23,8 +23,8 @@ import {formatNumber, getTimeStamp} from "@/lib/utils";
 import {RouteParams, Tag} from "@/types";
 
 const QuestionDetails = async ({params, searchParams}: RouteParams) => {
-  const { id } = await params;
-  const { page, pageSize, filter } = await searchParams;
+  const {id} = await params;
+  const {page, pageSize, filter} = await searchParams;
 
   const {success, data: question} = await getQuestion({questionId: id});
   if (!success || !question) return notFound();
@@ -145,6 +145,8 @@ const QuestionDetails = async ({params, searchParams}: RouteParams) => {
           success={answersSuccess}
           error={answersError}
           totalAnswers={answersResult?.totalAnswers || 0}
+          page={Number(page) || 1}
+          isNext={answersResult?.isNext || false}
         />
       </div>
 

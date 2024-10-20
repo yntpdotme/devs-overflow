@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import Filter from "@/components/filters/Filter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import {TagQuestionFilters} from "@/constants/filters";
 import ROUTES from "@/constants/routes";
@@ -20,7 +21,7 @@ const Tag = async ({params, searchParams}: RouteParams) => {
     filter,
   });
 
-  const {tag, questions} = data || {};
+  const {tag, questions, isNext} = data || {};
 
   return (
     <>
@@ -54,6 +55,8 @@ const Tag = async ({params, searchParams}: RouteParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

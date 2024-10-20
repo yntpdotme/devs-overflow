@@ -1,6 +1,7 @@
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import Filter from "@/components/filters/Filter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import {CollectionFilters} from "@/constants/filters";
 import ROUTES from "@/constants/routes";
@@ -18,7 +19,7 @@ const Collections = async ({searchParams}: RouteParams) => {
     filter: filter || "",
   });
 
-  const {collection} = data || {};
+  const {collection, isNext} = data || {};
 
   return (
     <>
@@ -52,6 +53,8 @@ const Collections = async ({searchParams}: RouteParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

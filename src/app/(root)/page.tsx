@@ -3,6 +3,7 @@ import Link from "next/link";
 import QuestionCard from "@/components/cards/QuestionCard";
 import DataRenderer from "@/components/DataRenderer";
 import HomeFilter from "@/components/filters/HomeFilter";
+import Pagination from "@/components/Pagination";
 import LocalSearch from "@/components/search/LocalSearch";
 import {Button} from "@/components/ui/button";
 import ROUTES from "@/constants/routes";
@@ -11,7 +12,7 @@ import {getQuestions} from "@/lib/actions";
 import {RouteParams} from "@/types";
 
 const Home = async ({searchParams}: RouteParams) => {
-  const {page, pageSize, q:query, filter} = await searchParams;
+  const {page, pageSize, q: query, filter} = await searchParams;
 
   const {success, data, error} = await getQuestions({
     page: Number(page) || 1,
@@ -20,7 +21,7 @@ const Home = async ({searchParams}: RouteParams) => {
     filter: filter || "",
   });
 
-  const {questions} = data || {};
+  const {questions, isNext} = data || {};
 
   return (
     <>
@@ -60,6 +61,8 @@ const Home = async ({searchParams}: RouteParams) => {
           </div>
         )}
       />
+
+      <Pagination page={page} isNext={isNext || false} />
     </>
   );
 };

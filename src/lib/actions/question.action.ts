@@ -4,6 +4,7 @@ import mongoose, {FilterQuery} from "mongoose";
 
 import {Question, Tag, TagQuestion} from "@/database";
 import {QuestionDoc} from "@/database/question.model";
+import connectDB from "@/lib/db";
 import {action, handleError} from "@/lib/handlers";
 import {
   AskQuestionSchema,
@@ -313,6 +314,25 @@ export const incrementViews = async (
     return {
       success: true,
       data: {views: question.views},
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getHotQuestions = async (): Promise<
+  ActionResponse<QuestionType[]>
+> => {
+  try {
+    await connectDB();
+
+    const questions = await Question.find()
+      .sort({views: -1, upvotes: -1})
+      .limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(questions)),
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

@@ -12,6 +12,7 @@ import {
 import {
   createQuestion,
   editQuestion,
+  getHotQuestions,
   getQuestion,
   getQuestions,
   incrementViews,
@@ -26,6 +27,7 @@ export {
   createVote,
   editQuestion,
   getAnswers,
+  getHotQuestions,
   getQuestion,
   getQuestions,
   getSavedQuestions,

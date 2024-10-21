@@ -5,10 +5,11 @@ import Image from "next/image";
 import Link from "next/link";
 import TagCard from "../cards/TagCard";
 
-
 const RightSidebar = async () => {
-  const {success, data: hotQuestions, error} = await getHotQuestions();
-  const {success:tagSuccess, data: tags, error:tagError} = await getTopTags();
+  const [
+    {success, data: hotQuestions, error},
+    {success: tagSuccess, data: tags, error: tagError},
+  ] = await Promise.all([getHotQuestions(), getTopTags()]);
 
   return (
     <section className="custom-scrollbar custom-scrollbar-left background-light900_dark200 light-border sticky left-0 top-0 flex h-full w-[300px] flex-col gap-1 overflow-y-auto border-r p-8 pb-6 pt-[80px] shadow-light-300 dark:shadow-none max-xl:hidden">

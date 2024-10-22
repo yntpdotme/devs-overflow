@@ -2,6 +2,7 @@ import {FilterQuery} from "mongoose";
 
 import {Question} from "@/database";
 import Tag from "@/database/tag.model";
+import connectDB from "@/lib/db";
 import {action, handleError} from "@/lib/handlers";
 import {
   GetTagQuestionsSchema,
@@ -120,15 +121,15 @@ export const getTagQuestions = async (
     }
 
     const sortOptions: Record<string, Record<string, 1 | -1>> = {
-      mostrecent: {"createdAt": -1},
-      oldest: {"createdAt": 1},
-      mostvoted: {"upvotes": -1},
-      mostviewed: {"views": -1},
-      mostanswered: {"answers": -1},
+      mostrecent: {createdAt: -1},
+      oldest: {createdAt: 1},
+      mostvoted: {upvotes: -1},
+      mostviewed: {views: -1},
+      mostanswered: {answers: -1},
     };
 
     const sortCriteria = sortOptions[filter as keyof typeof sortOptions] || {
-      "createdAt": -1,
+      createdAt: -1,
     };
 
     const totalQuestions = await Question.countDocuments(filterQuery);
@@ -150,6 +151,21 @@ export const getTagQuestions = async (
         questions: JSON.parse(JSON.stringify(questions)),
         isNext,
       },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getTopTags = async (): Promise<ActionResponse<TagType[]>> => {
+  try {
+    await connectDB();
+
+    const tags = await Tag.find().sort({questions: -1}).limit(5);
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(tags)),
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

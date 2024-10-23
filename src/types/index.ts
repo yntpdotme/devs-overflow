@@ -155,3 +155,7 @@ export type User = {
   reputation?: number;
   createdAt: Date;
 };
+
+export type GetUserParams = {
+  userId: string;
+}

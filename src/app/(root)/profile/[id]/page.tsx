@@ -4,6 +4,7 @@ import {notFound} from "next/navigation";
 import {auth} from "@/auth";
 import {Button} from "@/components/ui/button";
 import ProfileLink from "@/components/user/ProfileLink";
+import Stats from "@/components/user/Stats";
 import UserAvatar from "@/components/UserAvatar";
 import {getUser} from "@/lib/actions";
 import {RouteParams} from "@/types";
@@ -47,12 +48,12 @@ const Profile = async ({params}: RouteParams) => {
           />
 
           <div className="max-lg:mt-3 mt-1.5">
-            <h2 className="h2-bold text-dark100_light900 mb-2">{user.name}</h2>
+            <h2 className="h2-bold text-dark100_light900 mb-1.5">{user.name}</h2>
             <p className="paragraph-regular text-dark200_light800">
               @{user.username}
             </p>
 
-            <div className="mt-5 flex flex-wrap items-center justify-start gap-5">
+            <div className="mt-4 flex flex-wrap items-center justify-start gap-5">
               {user.portfolio && (
                 <ProfileLink
                   imgUrl="/icons/link.svg"
@@ -91,6 +92,14 @@ const Profile = async ({params}: RouteParams) => {
             </Link>
           )}
         </div>
+      </section>
+
+      <section className="sm:flex-row px-6 sm:px-12 mt-8">
+        <Stats
+          totalQuestions={totalQuestions}
+          totalAnswers={totalAnswers}
+          badges={{GOLD: 0, BRONZE: 0, SILVER: 0}}
+        />
       </section>
     </>
   );

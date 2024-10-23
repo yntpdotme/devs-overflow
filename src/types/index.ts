@@ -159,3 +159,9 @@ export type User = {
 export type GetUserParams = {
   userId: string;
 }
+
+export type BadgeCounts = {
+  GOLD: number,
+  SILVER: number,
+  BRONZE: number;
+}

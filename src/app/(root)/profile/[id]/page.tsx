@@ -94,7 +94,7 @@ const Profile = async ({params}: RouteParams) => {
         </div>
       </section>
 
-      <section className="sm:flex-row px-6 sm:px-12 mt-8">
+      <section className="px-6 sm:px-12 mt-8">
         <Stats
           totalQuestions={totalQuestions}
           totalAnswers={totalAnswers}

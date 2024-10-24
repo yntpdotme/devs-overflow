@@ -242,7 +242,7 @@ code {
   }
 
   .light-border {
-    @apply border-light-800 dark:border-dark-300;
+    @apply border-light-700/60 dark:border-dark-300;
   }
 
   .light-border-2 {

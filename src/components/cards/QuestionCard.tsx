@@ -12,7 +12,7 @@ type QuestionCardProps = {
 
 const QuestionCard = ({question}: QuestionCardProps) => {
   return (
-    <div className="card-wrapper rounded-[10px] p-9 sm:px-10">
+    <div className="light-border border card-wrapper rounded-[10px] p-9 sm:px-10">
       <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
         {getTimeStamp(question.createdAt)}
       </span>

@@ -4,13 +4,15 @@ import {FilterQuery} from "mongoose";
 
 import {Answer, Question, User} from "@/database";
 import {action, handleError} from "@/lib/handlers";
-import {GetUserSchema, PaginatedSearchParamsSchema} from "@/lib/schemas";
+import {GetUserQuestionsSchema, GetUserSchema, PaginatedSearchParamsSchema} from "@/lib/schemas";
 import {
   ActionResponse,
   ErrorResponse,
   GetUserParams,
+  GetUserQuestionsParams,
   PaginatedSearchParams,
   User as UserType,
+  Question as QuestionType,
 } from "@/types";
 
 export const getUsers = async (
@@ -112,6 +114,43 @@ export const getUser = async (
         totalQuestions,
         totalAnswers,
       },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getUserQuestions = async (
+  params: GetUserQuestionsParams
+): Promise<ActionResponse<{questions: QuestionType[]; isNext: boolean}>> => {
+  const validationResult = await action({
+    params,
+    schema: GetUserQuestionsSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {userId, page = 1, pageSize = 10} = validationResult.params!;
+  const skip = (Number(page) - 1) * pageSize;
+  const limit = Number(pageSize);
+
+  try {
+    const totalQuestions = await Question.countDocuments({author: userId});
+
+    const questions = await Question.find({author: userId})
+      .populate("tags", "name")
+      .populate("author", "name image")
+      .sort({createdAt: -1})
+      .skip(skip)
+      .limit(limit);
+
+    const isNext = totalQuestions > skip + limit;
+
+    return {
+      success: true,
+      data: {questions: JSON.parse(JSON.stringify(questions)), isNext},
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;

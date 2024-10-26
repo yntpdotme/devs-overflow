@@ -158,10 +158,17 @@ export type User = {
 
 export type GetUserParams = {
   userId: string;
-}
+};
 
 export type BadgeCounts = {
-  GOLD: number,
-  SILVER: number,
+  GOLD: number;
+  SILVER: number;
   BRONZE: number;
-}
+};
+
+export type GetUserQuestionsParams = Omit<
+  PaginatedSearchParams,
+  "query" | "filter" | "sort"
+> & {
+  userId: string;
+};

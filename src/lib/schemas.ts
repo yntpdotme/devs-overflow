@@ -278,3 +278,18 @@ export const GetUserSchema = z.object({
     })
     .refine(val => val.length === 24, {message: "Invalid userId"}),
 });
+
+export const GetUserQuestionsSchema = PaginatedSearchParamsSchema.omit({
+  query: true,
+  filter: true,
+  sort: true,
+}).extend({
+  userId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "User ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "User ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid userId"}),
+});

@@ -5,13 +5,14 @@ import {auth} from "@/auth";
 import DataRenderer from "@/components/DataRenderer";
 import Pagination from "@/components/Pagination";
 import UserAvatar from "@/components/UserAvatar";
+import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
-import {EMPTY_QUESTION} from "@/constants/states";
-import {getUser, getUserQuestions} from "@/lib/actions";
+import {EMPTY_ANSWERS, EMPTY_QUESTION} from "@/constants/states";
+import {getUser, getUserAnswers, getUserQuestions} from "@/lib/actions";
 import {RouteParams} from "@/types";
 import Link from "next/link";
 
@@ -52,7 +53,18 @@ const Profile = async ({params, searchParams}: RouteParams) => {
     pageSize: Number(pageSize) || 5,
   });
 
+  const {
+    success: userAnswersSuccess,
+    data: userAnswers,
+    error: userAnswersError,
+  } = await getUserAnswers({
+    userId: id,
+    page: Number(page) || 1,
+    pageSize: Number(pageSize) || 5,
+  });
+
   const {questions, isNext: hasMoreQuestions} = userQuestions!;
+  const {answers, isNext: hasMoreAnswers} = userAnswers!;
 
   return (
     <>
@@ -154,10 +166,32 @@ const Profile = async ({params, searchParams}: RouteParams) => {
 
             <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
+
           <TabsContent value="answers" className="flex w-full flex-col gap-6">
-            List of Answers
+            <DataRenderer
+              data={answers}
+              empty={EMPTY_ANSWERS}
+              success={userAnswersSuccess}
+              error={userAnswersError}
+              render={answers => (
+                <div className="flex w-full flex-col gap-6">
+                  {answers.map(answer => (
+                    <AnswerCard
+                      key={answer._id}
+                      {...answer}
+                      content={answer.content.slice(0, 27)}
+                      containerClasses="card-wrapper rounded-[10px] px-7 py-9 sm:px-11 border light-border-2"
+                      showReadMore
+                    />
+                  ))}
+                </div>
+              )}
+            />
+
+            <Pagination page={page} isNext={hasMoreQuestions} />
           </TabsContent>
         </Tabs>
+
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-semibold text-dark200_light900 mt-1.5">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">

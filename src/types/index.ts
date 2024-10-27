@@ -114,6 +114,7 @@ export type Answer = {
   createdAt: Date;
   upvotes: number;
   downvotes: number;
+  question: string;
 };
 
 export type CreateVoteParams = {
@@ -179,3 +180,4 @@ export type GetUserAnswersParams = Omit<
 > & {
   userId: string;
 };
+

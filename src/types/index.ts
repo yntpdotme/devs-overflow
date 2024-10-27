@@ -172,3 +172,10 @@ export type GetUserQuestionsParams = Omit<
 > & {
   userId: string;
 };
+
+export type GetUserAnswersParams = Omit<
+  PaginatedSearchParams,
+  "query" | "filter" | "sort"
+> & {
+  userId: string;
+};

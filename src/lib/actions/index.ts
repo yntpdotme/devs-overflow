@@ -18,7 +18,12 @@ import {
   incrementViews,
 } from "./question.action";
 import {getTagQuestions, getTags, getTopTags} from "./tag.action";
-import {getUser, getUserQuestions, getUsers} from "./user.action";
+import {
+  getUser,
+  getUserAnswers,
+  getUserQuestions,
+  getUsers,
+} from "./user.action";
 import {createVote, hasVoted, updateVoteCount} from "./vote.action";
 
 export {
@@ -35,6 +40,7 @@ export {
   getTags,
   getTopTags,
   getUser,
+  getUserAnswers,
   getUserQuestions,
   getUsers,
   hasSavedQuestion,

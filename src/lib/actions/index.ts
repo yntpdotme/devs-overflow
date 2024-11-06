@@ -22,6 +22,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserTopTags,
   getUsers,
 } from "./user.action";
 import {createVote, hasVoted, updateVoteCount} from "./vote.action";
@@ -42,6 +43,7 @@ export {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserTopTags,
   getUsers,
   hasSavedQuestion,
   hasVoted,

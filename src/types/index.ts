@@ -181,3 +181,6 @@ export type GetUserAnswersParams = Omit<
   userId: string;
 };
 
+export type GetUserTagsParams = {
+  userId: string;
+};

@@ -1,6 +1,6 @@
 "use server";
 
-import mongoose, {PipelineStage} from "mongoose";
+import {PipelineStage, Types} from "mongoose";
 import {revalidatePath} from "next/cache";
 
 import ROUTES from "@/constants/routes";
@@ -143,7 +143,7 @@ export const getSavedQuestions = async (
   try {
     const pipeline: PipelineStage[] = [
       {
-        $match: {author: new mongoose.Types.ObjectId(userId)},
+        $match: {author: new Types.ObjectId(userId)},
       },
       {
         $lookup: {

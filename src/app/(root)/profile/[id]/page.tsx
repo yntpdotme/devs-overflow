@@ -7,12 +7,18 @@ import Pagination from "@/components/Pagination";
 import UserAvatar from "@/components/UserAvatar";
 import AnswerCard from "@/components/cards/AnswerCard";
 import QuestionCard from "@/components/cards/QuestionCard";
+import TagCard from "@/components/cards/TagCard";
 import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
-import {EMPTY_ANSWERS, EMPTY_QUESTION} from "@/constants/states";
-import {getUser, getUserAnswers, getUserQuestions} from "@/lib/actions";
+import {EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS} from "@/constants/states";
+import {
+  getUser,
+  getUserAnswers,
+  getUserQuestions,
+  getUserTopTags,
+} from "@/lib/actions";
 import {RouteParams} from "@/types";
 import Link from "next/link";
 
@@ -63,8 +69,17 @@ const Profile = async ({params, searchParams}: RouteParams) => {
     pageSize: Number(pageSize) || 5,
   });
 
+  const {
+    success: userTopTagsSuccess,
+    data: userTopTags,
+    error: userTopTagsError,
+  } = await getUserTopTags({
+    userId: id,
+  });
+
   const {questions, isNext: hasMoreQuestions} = userQuestions!;
   const {answers, isNext: hasMoreAnswers} = userAnswers!;
+  const {tags} = userTopTags!;
 
   return (
     <>
@@ -195,7 +210,26 @@ const Profile = async ({params, searchParams}: RouteParams) => {
         <div className="flex w-full min-w-[250px] flex-1 flex-col max-lg:hidden">
           <h3 className="h3-semibold text-dark200_light900 mt-1.5">Top Tech</h3>
           <div className="mt-7 flex flex-col gap-4">
-            <p>List of Tags</p>
+            <DataRenderer
+              data={tags}
+              empty={EMPTY_TAGS}
+              success={userTopTagsSuccess}
+              error={userTopTagsError}
+              render={tags => (
+                <div className="flex mt-3 w-full flex-col gap-4">
+                  {tags.map(tag => (
+                    <TagCard
+                      key={tag._id}
+                      _id={tag._id}
+                      name={tag.name}
+                      questions={tag.count}
+                      showCount
+                      compact
+                    />
+                  ))}
+                </div>
+              )}
+            />
           </div>
         </div>
       </section>

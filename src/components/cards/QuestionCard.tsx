@@ -3,25 +3,37 @@ import Link from "next/link";
 import Metric from "@/components/Metric";
 import TagCard from "@/components/cards/TagCard";
 import ROUTES from "@/constants/routes";
-import {getTimeStamp} from "@/lib/utils";
-import {Question, Tag} from "@/types";
+import { getTimeStamp } from "@/lib/utils";
+import { Question, Tag } from "@/types";
+import EditDeleteAction from "../user/EditDeleteAction";
 
 type QuestionCardProps = {
   question: Question;
+  showActionButtons?: boolean;
 };
 
-const QuestionCard = ({question}: QuestionCardProps) => {
+const QuestionCard = ({
+  question,
+  showActionButtons = false,
+}: QuestionCardProps) => {
   return (
-    <div className="light-border border card-wrapper rounded-[10px] p-9 sm:px-10">
-      <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
-        {getTimeStamp(question.createdAt)}
-      </span>
+    <div className="light-border card-wrapper rounded-[10px] border p-9 sm:px-10">
+      <div className="flex flex-col-reverse sm:items-center gap-4 sm:flex-row">
+        <div className="flex-1">
+          <span className="subtle-regular text-dark400_light700 line-clamp-1 flex sm:hidden">
+            {getTimeStamp(question.createdAt)}
+          </span>
+          <Link href={ROUTES.QUESTION(question._id)}>
+            <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
+              {question.title}
+            </h3>
+          </Link>
+        </div>
 
-      <Link href={ROUTES.QUESTION(question._id)}>
-        <h3 className="sm:h3-semibold base-semibold text-dark200_light900 line-clamp-1 flex-1">
-          {question.title}
-        </h3>
-      </Link>
+        {showActionButtons && (
+          <EditDeleteAction type="Question" itemId={question._id} />
+        )}
+      </div>
 
       <div className="no-scrollbar mt-3.5 flex w-full gap-2 overflow-y-auto">
         {question.tags.map((tag: Tag) => (

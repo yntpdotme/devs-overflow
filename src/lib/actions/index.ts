@@ -11,6 +11,7 @@ import {
 } from "./collection.action";
 import {
   createQuestion,
+  deleteQuestion,
   editQuestion,
   getHotQuestions,
   getQuestion,
@@ -31,6 +32,7 @@ export {
   createAnswer,
   createQuestion,
   createVote,
+  deleteQuestion,
   editQuestion,
   getAnswers,
   getHotQuestions,

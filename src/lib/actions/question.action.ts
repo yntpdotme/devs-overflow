@@ -1,13 +1,16 @@
 "use server";
 
 import mongoose, {FilterQuery} from "mongoose";
+import {revalidatePath} from "next/cache";
 
-import {Question, Tag, TagQuestion} from "@/database";
+import ROUTES from "@/constants/routes";
+import {Answer, Collection, Question, Tag, TagQuestion, Vote} from "@/database";
 import {QuestionDoc} from "@/database/question.model";
 import connectDB from "@/lib/db";
 import {action, handleError} from "@/lib/handlers";
 import {
   AskQuestionSchema,
+  DeleteQuestionSchema,
   EditQuestionSchema,
   GetQuestionSchema,
   IncrementViewsSchema,
@@ -16,6 +19,7 @@ import {
 import {
   ActionResponse,
   CreateQuestionParams,
+  DeleteQuestionParams,
   EditQuestionParams,
   ErrorResponse,
   GetQuestionParams,
@@ -40,9 +44,10 @@ export const createQuestion = async (
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
+    session.startTransaction();
+
     const [question] = await Question.create(
       [{title, content, author: userId}],
       {session}
@@ -52,7 +57,10 @@ export const createQuestion = async (
     const tagUpdates = tags.map(tag => ({
       updateOne: {
         filter: {name: tag.toLowerCase()},
-        update: {$setOnInsert: {name: tag.toLowerCase()}, $inc: {questions: 1}},
+        update: {
+          $setOnInsert: {name: tag.toLowerCase()},
+          $inc: {questions: 1},
+        },
         upsert: true,
       },
     }));
@@ -134,9 +142,10 @@ export const editQuestion = async (
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
+    session.startTransaction();
+
     const question = await Question.findById(questionId);
     if (!question) throw new Error("Question not found");
     if (question.author.toString() !== userId) throw new Error("Unauthorized");
@@ -336,5 +345,79 @@ export const getHotQuestions = async (): Promise<
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+};
+
+export const deleteQuestion = async (
+  params: DeleteQuestionParams
+): Promise<ActionResponse> => {
+  const validationResult = await action({
+    params,
+    schema: DeleteQuestionSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {questionId} = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const question = await Question.findById(questionId).session(session);
+    if (!question) throw new Error("Question not found");
+    if (question.author.toString() !== userId) throw new Error("Unauthorized");
+
+    // delete references from user collection
+    await Collection.deleteMany({question: questionId}).session(session);
+
+    // delete references from TagQuestion
+    await TagQuestion.deleteMany({question: questionId}).session(session);
+
+    // reduce tags question count
+    if (question.tags.length > 0) {
+      await Tag.updateMany(
+        {_id: {$in: question.tags}},
+        {$inc: {questions: -1}},
+        {session}
+      );
+    }
+
+    // remove all votes of the question
+    await Vote.deleteMany({
+      actionId: questionId,
+      actionType: "question",
+    }).session(session);
+
+    // remove all answers and their votes of the question
+    const answers = await Answer.find({question: questionId}).session(session);
+    if (answers.length > 0) {
+      await Answer.deleteMany({question: questionId}).session(session);
+
+      await Vote.deleteMany({
+        actionId: {$in: answers.map(answer => answer.id)},
+        actionType: "answer",
+      });
+    }
+
+    // delete question
+    await Question.findByIdAndDelete(questionId).session(session);
+
+    await session.commitTransaction();
+
+    revalidatePath(ROUTES.PROFILE(userId!));
+
+    return {success: true};
+  } catch (error) {
+    if (session.inTransaction()) await session.abortTransaction();
+
+    return handleError(error) as ErrorResponse;
+  } finally {
+    session?.endSession();
   }
 };

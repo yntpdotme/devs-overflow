@@ -11,16 +11,17 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { toast } from "@/hooks/use-toast";
+import {toast} from "@/hooks/use-toast";
+import {deleteQuestion} from "@/lib/actions";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import {useRouter} from "next/navigation";
 
 type EditDeleteActionProps = {
   type: "Question" | "Answer";
   itemId: string;
 };
 
-const EditDeleteAction = ({ type, itemId }: EditDeleteActionProps) => {
+const EditDeleteAction = ({type, itemId}: EditDeleteActionProps) => {
   const router = useRouter();
 
   const handleEdit = async () => {
@@ -29,7 +30,7 @@ const EditDeleteAction = ({ type, itemId }: EditDeleteActionProps) => {
 
   const handleDelete = async () => {
     if (type === "Question") {
-      // call api
+      await deleteQuestion({questionId: itemId});
 
       toast({
         title: "Question deleted",

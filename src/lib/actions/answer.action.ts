@@ -19,6 +19,8 @@ import {
   ErrorResponse,
   GetAnswersParams,
 } from "@/types";
+import {after} from "next/server";
+import {createInteraction} from "./interaction.action";
 
 export const createAnswer = async (
   params: CreateAnswerParams
@@ -53,6 +55,15 @@ export const createAnswer = async (
     question.answers += 1;
     await question.save({session});
 
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: answer._id.toString(),
+        actionType: "answer",
+        authorId: userId as string,
+      });
+    });
+    
     await session.commitTransaction();
 
     revalidatePath(ROUTES.QUESTION(questionId));
@@ -63,7 +74,7 @@ export const createAnswer = async (
 
     return handleError(error) as ErrorResponse;
   } finally {
-    session.endSession();
+    session?.endSession();
   }
 };
 
@@ -172,9 +183,18 @@ export const deleteAnswer = async (
     // update question's answer count
     const question = await Question.findById(answer.question).session(session);
     if (!question) throw new Error("Question not found");
-    
+
     question.answers -= 1;
     await question.save({session});
+
+    after(async () => {
+      await createInteraction({
+        action: "delete",
+        actionId: answerId,
+        actionType: "answer",
+        authorId: userId as string,
+      });
+    });
 
     await session.commitTransaction();
 

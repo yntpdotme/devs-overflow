@@ -19,6 +19,8 @@ import {
   HasVotedResponse,
   UpdateVoteCountParams,
 } from "@/types";
+import {after} from "next/server";
+import {createInteraction} from "./interaction.action";
 
 export const updateVoteCount = async (
   params: UpdateVoteCountParams,
@@ -70,10 +72,17 @@ export const createVote = async (
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  
+
   try {
     session.startTransaction();
-    
+
+    const Model = actionType === "question" ? Question : Answer;
+
+    const contentDoc = await Model.findById(actionId).session(session);
+    if (!contentDoc) throw new Error("Content not found");
+
+    const contentAuthorId = contentDoc.author.toString();
+
     const existingVote = await Vote.findOne({
       author: userId,
       actionId,
@@ -117,6 +126,15 @@ export const createVote = async (
         session
       );
     }
+
+    after(async () => {
+      await createInteraction({
+        action: voteType,
+        actionId,
+        actionType,
+        authorId: contentAuthorId,
+      });
+    });
 
     await session.commitTransaction();
 

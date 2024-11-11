@@ -27,6 +27,8 @@ import {
   PaginatedSearchParams,
   Question as QuestionType,
 } from "@/types";
+import {after} from "next/server";
+import {createInteraction} from ".";
 
 export const createQuestion = async (
   params: CreateQuestionParams
@@ -80,8 +82,17 @@ export const createQuestion = async (
     );
 
     question.tags = allTags.map(t => t._id);
-
     await question.save({session});
+
+    after(async () => {
+      await createInteraction({
+        action: "post",
+        actionId: question._id.toString(),
+        actionType: "question",
+        authorId: userId as string,
+      });
+    });
+
     await session.commitTransaction();
 
     const finalQuestion = await Question.findById(question._id).lean();
@@ -407,6 +418,15 @@ export const deleteQuestion = async (
 
     // delete question
     await Question.findByIdAndDelete(questionId).session(session);
+
+    after(async () => {
+      await createInteraction({
+        action: "delete",
+        actionId: questionId,
+        actionType: "question",
+        authorId: userId as string,
+      });
+    });
 
     await session.commitTransaction();
 

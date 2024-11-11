@@ -1,4 +1,3 @@
-import {InteractionActionEnums} from "@/database/interaction.model";
 import {z} from "zod";
 
 export const SignInSchema = z.object({
@@ -344,9 +343,21 @@ export const DeleteAnswerSchema = z.object({
 });
 
 export const CreateInteractionSchema = z.object({
-  action: z.enum(InteractionActionEnums, {
-    message: "Invalid action.",
-  }),
+  action: z.enum(
+    [
+      "view",
+      "upvote",
+      "downvote",
+      "bookmark",
+      "post",
+      "edit",
+      "delete",
+      "search",
+    ],
+    {
+      message: "Invalid action type.",
+    }
+  ),
   actionId: z
     .string({
       // eslint-disable-next-line camelcase

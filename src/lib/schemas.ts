@@ -1,3 +1,4 @@
+import {InteractionActionEnums} from "@/database/interaction.model";
 import {z} from "zod";
 
 export const SignInSchema = z.object({
@@ -340,4 +341,29 @@ export const DeleteAnswerSchema = z.object({
       invalid_type_error: "Answer ID must be a string.",
     })
     .refine(val => val.length === 24, {message: "Invalid answerId"}),
+});
+
+export const CreateInteractionSchema = z.object({
+  action: z.enum(InteractionActionEnums, {
+    message: "Invalid action.",
+  }),
+  actionId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Action ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Action ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid actionId"}),
+  actionType: z.enum(["question", "answer"], {
+    message: "Invalid action type.",
+  }),
+  authorId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Author ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Author ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid userId"}),
 });

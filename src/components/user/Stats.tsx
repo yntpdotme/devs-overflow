@@ -7,6 +7,7 @@ type StatsProps = {
   totalQuestions: number;
   totalAnswers: number;
   badges: BadgeCounts;
+  reputationPoints: number;
 };
 
 type StatsCardProps = {
@@ -16,7 +17,7 @@ type StatsCardProps = {
 };
 
 const StatsCard = ({imgUrl, value, title}: StatsCardProps) => (
-  <div className="light-border background-light900_darkgradient flex flex-wrap items-center justify-start gap-4 rounded-md border px-6 py-4 shadow-light300_dark200">
+  <div className="light-border background-light900_darkgradient shadow-light300_dark200 flex flex-wrap items-center justify-start gap-4 rounded-md border px-6 py-4">
     <Image src={imgUrl} alt={title} width={40} height={50} />
     <div>
       <p className="paragraph-semibold text-dark200_light900">{value}</p>
@@ -25,13 +26,23 @@ const StatsCard = ({imgUrl, value, title}: StatsCardProps) => (
   </div>
 );
 
-const Stats = ({totalQuestions, totalAnswers, badges}: StatsProps) => {
+const Stats = ({
+  totalQuestions,
+  totalAnswers,
+  badges,
+  reputationPoints,
+}: StatsProps) => {
   return (
     <div className="mt-3">
-      <h4 className="h3-semibold text-dark200_light900">Stats</h4>
+      <h4 className="h3-semibold text-dark200_light900">
+        Stats{" "}
+        <span className="small-semibold primary-text-gradient">
+          {formatNumber(reputationPoints)}
+        </span>
+      </h4>
 
       <div className="mt-5 grid grid-cols-1 gap-5 xs:grid-cols-2 md:grid-cols-4">
-        <div className="light-border background-light900_darkgradient flex flex-wrap items-center justify-start gap-6 xs:justify-evenly md:gap-4 rounded-md border px-6 py-4 shadow-light300_dark200">
+        <div className="light-border background-light900_darkgradient shadow-light300_dark200 flex flex-wrap items-center justify-start gap-6 rounded-md border px-6 py-4 xs:justify-evenly md:gap-4">
           <div>
             <p className="paragraph-semibold text-dark200_light900">
               {formatNumber(totalQuestions)}

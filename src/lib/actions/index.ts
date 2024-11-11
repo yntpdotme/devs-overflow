@@ -9,6 +9,7 @@ import {
   hasSavedQuestion,
   toggleSaveQuestion,
 } from "./collection.action";
+import {createInteraction} from "./interaction.action";
 import {
   createQuestion,
   deleteQuestion,
@@ -30,6 +31,7 @@ import {createVote, hasVoted, updateVoteCount} from "./vote.action";
 
 export {
   createAnswer,
+  createInteraction,
   createQuestion,
   createVote,
   deleteAnswer,

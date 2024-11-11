@@ -1,3 +1,5 @@
+import {InteractionDoc} from "@/database/interaction.model";
+import mongoose from "mongoose";
 import {NextResponse} from "next/server";
 
 export type Tag = {
@@ -187,10 +189,30 @@ export type GetUserTagsParams = {
 
 export type DeleteQuestionParams = {
   questionId: string;
-}
+};
 
 export type DeleteAnswerParams = {
   answerId: string;
-}
+};
 
+export type CreateInteractionParams = {
+  action:
+    | "view"
+    | "upvote"
+    | "downvote"
+    | "bookmark"
+    | "post"
+    | "edit"
+    | "delete"
+    | "search";
+  actionId: string;
+  actionType: "question" | "answer";
+  authorId: string;
+};
 
+export type UpdateReputationParams = {
+  interaction: InteractionDoc;
+  session: mongoose.ClientSession;
+  performerId: string;
+  authorId: string;
+};

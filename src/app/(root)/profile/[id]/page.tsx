@@ -146,7 +146,8 @@ const Profile = async ({params, searchParams}: RouteParams) => {
         <Stats
           totalQuestions={totalQuestions}
           totalAnswers={totalAnswers}
-          badges={{GOLD: 0, BRONZE: 0, SILVER: 0}}
+          badges={{ GOLD: 0, BRONZE: 0, SILVER: 0 }}
+          reputationPoints={user.reputation || 0}
         />
       </section>
 

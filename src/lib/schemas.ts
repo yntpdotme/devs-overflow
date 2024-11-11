@@ -330,3 +330,14 @@ export const DeleteQuestionSchema = z.object({
     })
     .refine(val => val.length === 24, {message: "Invalid questionId"}),
 });
+
+export const DeleteAnswerSchema = z.object({
+  answerId: z
+    .string({
+      // eslint-disable-next-line camelcase
+      required_error: "Answer ID is required.",
+      // eslint-disable-next-line camelcase
+      invalid_type_error: "Answer ID must be a string.",
+    })
+    .refine(val => val.length === 24, {message: "Invalid answerId"}),
+});

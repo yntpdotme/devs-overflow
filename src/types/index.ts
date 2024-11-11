@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import {NextResponse} from "next/server";
 
 export type Tag = {
   _id: string;
@@ -35,9 +35,9 @@ export type ActionResponse<T = null> = {
   status?: number;
 };
 
-export type SuccessResponse<T = null> = ActionResponse<T> & { success: true };
+export type SuccessResponse<T = null> = ActionResponse<T> & {success: true};
 
-export type ErrorResponse = ActionResponse<undefined> & { success: false };
+export type ErrorResponse = ActionResponse<undefined> & {success: false};
 
 export type APIErrorResponse = NextResponse<ErrorResponse>;
 
@@ -187,4 +187,10 @@ export type GetUserTagsParams = {
 
 export type DeleteQuestionParams = {
   questionId: string;
-};
+}
+
+export type DeleteAnswerParams = {
+  answerId: string;
+}
+
+

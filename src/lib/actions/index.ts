@@ -1,4 +1,4 @@
-import {createAnswer, getAnswers} from "./answer.action";
+import {createAnswer, deleteAnswer, getAnswers} from "./answer.action";
 import {
   signInAsGuest,
   signInWithCredentials,
@@ -32,6 +32,7 @@ export {
   createAnswer,
   createQuestion,
   createVote,
+  deleteAnswer,
   deleteQuestion,
   editQuestion,
   getAnswers,

@@ -22,9 +22,10 @@ export const signUpWithCredentials = async (
   const {name, username, email, password} = validationResult.params!;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
-
+  
   try {
+    session.startTransaction();
+    
     const existingUser = await User.findOne({email});
     if (existingUser) throw new Error("Email already in use");
 

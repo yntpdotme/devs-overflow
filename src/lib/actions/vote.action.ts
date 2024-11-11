@@ -70,9 +70,10 @@ export const createVote = async (
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
-
+  
   try {
+    session.startTransaction();
+    
     const existingVote = await Vote.findOne({
       author: userId,
       actionId,

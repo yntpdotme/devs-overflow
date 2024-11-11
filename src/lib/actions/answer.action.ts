@@ -3,14 +3,19 @@ import mongoose from "mongoose";
 import {revalidatePath} from "next/cache";
 
 import ROUTES from "@/constants/routes";
-import {Question} from "@/database";
+import {Question, Vote} from "@/database";
 import Answer, {AnswerDoc} from "@/database/answer.model";
 import {action, handleError} from "@/lib/handlers";
-import {AnswerSchema, GetAnswersSchema} from "@/lib/schemas";
+import {
+  AnswerSchema,
+  DeleteAnswerSchema,
+  GetAnswersSchema,
+} from "@/lib/schemas";
 import {
   ActionResponse,
   Answer as AnswerType,
   CreateAnswerParams,
+  DeleteAnswerParams,
   ErrorResponse,
   GetAnswersParams,
 } from "@/types";
@@ -32,9 +37,10 @@ export const createAnswer = async (
   const userId = validationResult.session?.user?.id;
 
   const session = await mongoose.startSession();
-  session.startTransaction();
 
   try {
+    session.startTransaction();
+
     const question = await Question.findById(questionId);
     if (!question) throw new Error("Question not found");
 
@@ -125,5 +131,61 @@ export const getAnswers = async (
     };
   } catch (error) {
     return handleError(error) as ErrorResponse;
+  }
+};
+
+export const deleteAnswer = async (
+  params: DeleteAnswerParams
+): Promise<ActionResponse> => {
+  const validationResult = await action({
+    params,
+    schema: DeleteAnswerSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {answerId} = validationResult.params!;
+  const userId = validationResult.session?.user?.id;
+
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+
+    const answer = await Answer.findById(answerId).session(session);
+
+    if (!answer) throw new Error("Answer not found");
+    if (answer.author.toString() !== userId) throw new Error("Unauthorized");
+
+    // remove all votes of the answer
+    await Vote.deleteMany({
+      actionId: answerId,
+      actionType: "answer",
+    }).session(session);
+
+    // delete answer
+    await Answer.findByIdAndDelete(answerId).session(session);
+
+    // update question's answer count
+    const question = await Question.findById(answer.question).session(session);
+    if (!question) throw new Error("Question not found");
+    
+    question.answers -= 1;
+    await question.save({session});
+
+    await session.commitTransaction();
+
+    revalidatePath(ROUTES.PROFILE(userId!));
+
+    return {success: true};
+  } catch (error) {
+    if (session.inTransaction()) await session.abortTransaction();
+
+    return handleError(error) as ErrorResponse;
+  } finally {
+    session?.endSession();
   }
 };

@@ -216,3 +216,9 @@ export type UpdateReputationParams = {
   performerId: string;
   authorId: string;
 };
+
+export type Badges = {
+  GOLD: number;
+  SILVER: number;
+  BRONZE: number;
+};

@@ -17,6 +17,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserStats,
   getUserTopTags,
 } from "@/lib/actions";
 import {RouteParams} from "@/types";
@@ -40,14 +41,18 @@ const Profile = async ({params, searchParams}: RouteParams) => {
         <section className="flex flex-col gap-8 px-6 pt-10 sm:px-12 lg:pt-16">
           <h1 className="h1-bold text-dark100_light900">Profile</h1>
         </section>
-        <div className="mt-8 px-6 sm:mt-10 sm:px-12 h1-bold text-dark100_light900">
+        <div className="h1-bold text-dark100_light900 mt-8 px-6 sm:mt-10 sm:px-12">
           {error?.message}
         </div>
       </>
     );
   }
 
-  const {user, totalQuestions, totalAnswers} = data!;
+  const {user} = data!;
+
+  const {data: userStats} = await getUserStats({
+    userId: id,
+  });
 
   const {
     success: userQuestionsSuccess,
@@ -83,7 +88,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
 
   return (
     <>
-      <section className="flex flex-col-reverse items-start justify-between sm:flex-row px-6 pt-10 sm:px-12 lg:pt-16">
+      <section className="flex flex-col-reverse items-start justify-between px-6 pt-10 sm:flex-row sm:px-12 lg:pt-16">
         <div className="flex flex-col items-start gap-4 lg:flex-row">
           <UserAvatar
             id={user._id}
@@ -93,7 +98,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
             fallbackClassName="text-6xl font-bold"
           />
 
-          <div className="max-lg:mt-3 mt-1.5">
+          <div className="mt-1.5 max-lg:mt-3">
             <h2 className="h2-bold text-dark100_light900 mb-1.5">
               {user.name}
             </h2>
@@ -142,16 +147,16 @@ const Profile = async ({params, searchParams}: RouteParams) => {
         </div>
       </section>
 
-      <section className="px-6 sm:px-12 mt-8">
+      <section className="mt-8 px-6 sm:px-12">
         <Stats
-          totalQuestions={totalQuestions}
-          totalAnswers={totalAnswers}
-          badges={{ GOLD: 0, BRONZE: 0, SILVER: 0 }}
+          totalQuestions={userStats?.totalQuestions || 0}
+          totalAnswers={userStats?.totalAnswers || 0}
+          badges={userStats?.badges || {GOLD: 0, BRONZE: 0, SILVER: 0}}
           reputationPoints={user.reputation || 0}
         />
       </section>
 
-      <section className="px-6 sm:px-12 mt-10 flex gap-10">
+      <section className="mt-10 flex gap-10 px-6 sm:px-12">
         <Tabs defaultValue="top-posts" className="flex-[2]">
           <TabsList className="background-light800_dark400 min-h-[42px] p-1">
             <TabsTrigger value="top-posts" className="tab">
@@ -226,7 +231,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
               success={userTopTagsSuccess}
               error={userTopTagsError}
               render={tags => (
-                <div className="flex mt-3 w-full flex-col gap-4">
+                <div className="mt-3 flex w-full flex-col gap-4">
                   {tags.map(tag => (
                     <TagCard
                       key={tag._id}

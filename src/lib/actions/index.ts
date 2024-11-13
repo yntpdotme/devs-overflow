@@ -24,6 +24,7 @@ import {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserStats,
   getUserTopTags,
   getUsers,
 } from "./user.action";
@@ -48,6 +49,7 @@ export {
   getUser,
   getUserAnswers,
   getUserQuestions,
+  getUserStats,
   getUserTopTags,
   getUsers,
   hasSavedQuestion,

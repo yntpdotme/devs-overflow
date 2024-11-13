@@ -11,9 +11,11 @@ import {
   GetUserTagsSchema,
   PaginatedSearchParamsSchema,
 } from "@/lib/schemas";
+import {assignBadges} from "@/lib/utils";
 import {
   ActionResponse,
   Answer as AnswerType,
+  Badges,
   ErrorResponse,
   GetUserAnswersParams,
   GetUserParams,
@@ -93,8 +95,6 @@ export const getUser = async (
 ): Promise<
   ActionResponse<{
     user: UserType;
-    totalQuestions: number;
-    totalAnswers: number;
   }>
 > => {
   const validationResult = await action({
@@ -113,15 +113,81 @@ export const getUser = async (
 
     if (!user) throw new Error("User not found");
 
-    const totalQuestions = await Question.countDocuments({author: userId});
-    const totalAnswers = await Answer.countDocuments({author: userId});
-
     return {
       success: true,
       data: {
         user: JSON.parse(JSON.stringify(user)),
-        totalQuestions,
-        totalAnswers,
+      },
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+};
+
+export const getUserStats = async (
+  params: GetUserParams
+): Promise<
+  ActionResponse<{
+    totalQuestions: number;
+    totalAnswers: number;
+    badges: Badges;
+  }>
+> => {
+  const validationResult = await action({
+    params,
+    schema: GetUserSchema,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {userId} = validationResult.params!;
+
+  try {
+    const [questionStats] = await Question.aggregate([
+      {
+        $match: {author: new Types.ObjectId(userId)},
+      },
+      {
+        $group: {
+          _id: null,
+          count: {$sum: 1},
+          upvotes: {$sum: "$upvotes"},
+          views: {$sum: "$views"},
+        },
+      },
+    ]);
+
+    const [answerStats] = await Answer.aggregate([
+      {
+        $match: {author: new Types.ObjectId(userId)},
+      },
+      {
+        $group: {
+          _id: null,
+          count: {$sum: 1},
+          upvotes: {$sum: "$upvotes"},
+        },
+      },
+    ]);
+
+    const badges = assignBadges({
+      criteria: [
+        {type: "QUESTION_COUNT", count: questionStats.count},
+        {type: "ANSWER_COUNT", count: answerStats.count},
+        {type: "QUESTION_UPVOTES", count: questionStats.upvotes},
+        {type: "ANSWER_UPVOTES", count: answerStats.upvotes},
+        {type: "TOTAL_VIEWS", count: questionStats.views},
+      ],
+    });
+
+    return {
+      success: true,
+      data: {
+        totalQuestions: questionStats?.count || 0,
+        totalAnswers: answerStats?.count || 0,
+        badges,
       },
     };
   } catch (error) {

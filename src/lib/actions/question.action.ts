@@ -1,10 +1,19 @@
 "use server";
 
-import mongoose, {FilterQuery} from "mongoose";
+import mongoose, {FilterQuery, Types} from "mongoose";
 import {revalidatePath} from "next/cache";
 
+import {auth} from "@/auth";
 import ROUTES from "@/constants/routes";
-import {Answer, Collection, Question, Tag, TagQuestion, Vote} from "@/database";
+import {
+  Answer,
+  Collection,
+  Interaction,
+  Question,
+  Tag,
+  TagQuestion,
+  Vote,
+} from "@/database";
 import {QuestionDoc} from "@/database/question.model";
 import connectDB from "@/lib/db";
 import {action, handleError} from "@/lib/handlers";
@@ -26,6 +35,7 @@ import {
   IncrementViewsParams,
   PaginatedSearchParams,
   Question as QuestionType,
+  RecommendationParams,
 } from "@/types";
 import {after} from "next/server";
 import {createInteraction} from ".";
@@ -237,6 +247,65 @@ export const editQuestion = async (
   }
 };
 
+const getRecommendedQuestions = async ({
+  userId,
+  query,
+  skip,
+  limit,
+}: RecommendationParams): Promise<{
+  questions: QuestionType[];
+  isNext: boolean;
+}> => {
+  const interactions = await Interaction.find({
+    user: new Types.ObjectId(userId),
+    actionType: "question",
+    action: {$in: ["post", "upvote", "bookmark", "view"]},
+  })
+    .sort({createdAt: -1})
+    .limit(50)
+    .lean();
+
+  const interactedQuestionIds = interactions.map(i => i.actionId);
+
+  const interactedQuestions = await Question.find({
+    _id: {$in: interactedQuestionIds},
+  }).select("tags");
+
+  const allTags = interactedQuestions
+    .flatMap(q => q.tags)
+    .map(t => t.toString());
+
+  const uniqueTagIds = Array.from(new Set(allTags));
+
+  const recommendedQuery: FilterQuery<typeof Question> = {
+    _id: {$nin: interactedQuestionIds},
+    author: {$ne: new Types.ObjectId(userId)},
+    tags: {$in: uniqueTagIds.map((id: string) => new Types.ObjectId(id))},
+  };
+
+  if (query) {
+    recommendedQuery.$or = [
+      {title: {$regex: new RegExp(query, "i")}},
+      {content: {$regex: new RegExp(query, "i")}},
+    ];
+  }
+
+  const totalQuestions = await Question.countDocuments(recommendedQuery);
+
+  const questions = await Question.find(recommendedQuery)
+    .populate("tags", "name")
+    .populate("author", "name image")
+    .sort({upvotes: -1, views: -1})
+    .skip(skip)
+    .limit(limit)
+    .lean();
+
+  return {
+    questions: JSON.parse(JSON.stringify(questions)),
+    isNext: totalQuestions > skip + limit,
+  };
+};
+
 export const getQuestions = async (
   params: PaginatedSearchParams
 ): Promise<ActionResponse<{questions: QuestionType[]; isNext: boolean}>> => {
@@ -263,7 +332,24 @@ export const getQuestions = async (
 
   if (filter === "recommended") {
     // TODO: Implement recommended questions logic
-    return {success: true, data: {questions: [], isNext: false}};
+    const session = await auth();
+    const userId = session?.user?.id;
+
+    if (!userId) {
+      return {success: true, data: {questions: [], isNext: false}};
+    }
+
+    const {questions, isNext} = await getRecommendedQuestions({
+      userId,
+      query,
+      skip,
+      limit,
+    });
+
+    return {
+      success: true,
+      data: {questions, isNext},
+    };
   }
 
   let sortCriteria = {};

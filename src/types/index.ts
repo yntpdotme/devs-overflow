@@ -222,3 +222,10 @@ export type Badges = {
   SILVER: number;
   BRONZE: number;
 };
+
+export type RecommendationParams = {
+  userId: string;
+  query?: string;
+  skip: number;
+  limit: number;
+};

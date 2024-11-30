@@ -64,4 +64,44 @@ export const metadata: Metadata = {
   icons: {
     icon: "/images/site-logo.svg",
   },
+  generator: "Next.js",
+  applicationName: "Devs Overflow",
+  referrer: "origin-when-cross-origin",
+
+  keywords: [
+    "Devs Overflow",
+    "programming questions",
+    "developer Q&A",
+    "web development",
+    "JavaScript",
+    "React",
+    "Node.js",
+    "algorithms",
+    "data structures",
+    "developer community",
+  ],
+
+  authors: [{name: "Akash Kadlag", url: "https://yntp.me"}],
+  creator: "Akash Kadlag",
+  publisher: "Devs Overflow",
+
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
 };

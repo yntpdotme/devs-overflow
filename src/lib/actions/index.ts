@@ -10,6 +10,7 @@ import {
   toggleSaveQuestion,
 } from "./collection.action";
 import {createInteraction} from "./interaction.action";
+import {fetchCountries, fetchJobs, fetchLocation} from "./job.action";
 import {
   createQuestion,
   deleteQuestion,
@@ -38,6 +39,9 @@ export {
   deleteAnswer,
   deleteQuestion,
   editQuestion,
+  fetchCountries,
+  fetchJobs,
+  fetchLocation,
   getAnswers,
   getHotQuestions,
   getQuestion,

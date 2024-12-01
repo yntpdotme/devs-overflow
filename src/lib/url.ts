@@ -40,3 +40,17 @@ export const removeKeysFromUrlQuery = ({
     {skipNull: true}
   );
 };
+
+export const buildApiUrl = (baseUrl: string, params: Record<string, string | number>) => {
+  const cleanParams = Object.entries(params).reduce((acc, [key, value]) => {
+    if (value !== undefined && value !== null && value !== '') {
+      acc[key] = String(value);
+    }
+    return acc;
+  }, {} as Record<string, string>);
+
+  return qs.stringifyUrl({
+    url: baseUrl,
+    query: cleanParams,
+  });
+};

@@ -49,8 +49,8 @@ const StateMessage = ({image, title, message, button}: StateMessageProps) => (
       <Image
         src={image.light}
         alt={image.alt}
-        width={300}
-        height={210}
+        width={220}
+        height={150}
         className="object-contain dark:hidden"
       />
     </>

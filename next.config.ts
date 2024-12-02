@@ -6,12 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        port: "",
-      },
-      {
-        protocol: "https",
-        hostname: "avatars.githubusercontent.com",
+        hostname: "*",
         port: "",
       },
     ],

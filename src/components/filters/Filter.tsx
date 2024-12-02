@@ -19,6 +19,7 @@ type Filter = {
 };
 
 type FilterProps = {
+  paramKey?: string;
   filters: Filter[];
   otherClasses?: string;
   containerClasses?: string;
@@ -26,14 +27,16 @@ type FilterProps = {
 };
 
 const Filter = ({
+  paramKey = "filter",
   filters,
   otherClasses = "",
   containerClasses = "",
   defaultOptionName = "All",
 }: FilterProps) => {
+
   const searchParams = useSearchParams();
   const router = useRouter();
-  const paramFilter = searchParams.get("filter");
+  const paramFilter = searchParams.get(paramKey);
   filters = [{name: defaultOptionName, value: "all"}, ...filters];
 
   const handleUpdateParams = (value: string) => {
@@ -41,11 +44,11 @@ const Filter = ({
       value === "all"
         ? removeKeysFromUrlQuery({
             params: searchParams.toString(),
-            keysToRemove: ["filter"],
+            keysToRemove: [paramKey],
           })
         : formUrlQuery({
             params: searchParams.toString(),
-            key: "filter",
+            key: paramKey,
             value,
           });
 

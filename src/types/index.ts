@@ -249,3 +249,14 @@ export type Country = {
     common: string;
   };
 }
+
+export type GlobalSearchParams = {
+  query: string;
+  type: string | null;
+}
+
+export type GlobalSearchItem = {
+  title: string;
+  type: "question" | "answer" | "user" | "tag" | "job";
+  id: string;
+}

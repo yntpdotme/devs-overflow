@@ -378,3 +378,8 @@ export const CreateInteractionSchema = z.object({
     })
     .refine(val => val.length === 24, {message: "Invalid userId"}),
 });
+
+export const GlobalSearchSchema = z.object({
+  query: z.string(),
+  type: z.string().nullable().optional(),
+});

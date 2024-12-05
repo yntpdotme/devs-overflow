@@ -1,6 +1,6 @@
 "use client";
 
-import { Input } from "@/components/ui/input";
+import {Input} from "@/components/ui/input";
 import {formUrlQuery, removeKeysFromUrlQuery} from "@/lib/url";
 import Image from "next/image";
 import {usePathname, useRouter, useSearchParams} from "next/navigation";
@@ -54,10 +54,10 @@ const GlobalSearch = () => {
 
   return (
     <div
-      className="w-full max-w-[450px] max-lg:hidden relative"
+      className="relative w-full max-w-[450px] max-lg:hidden"
       ref={searchContainerRef}
     >
-      <div className="background-light800_darkgradient light-border relative flex items-center gap-0.5 rounded-xl border px-4 py-0.5">
+      <div className="background-light800_darkgradient relative flex items-center gap-0.5 rounded-xl border px-4 py-0.5 dark:border-gray-800">
         <Image
           src="/icons/search.svg"
           alt="search"

@@ -9,6 +9,7 @@ import {
   hasSavedQuestion,
   toggleSaveQuestion,
 } from "./collection.action";
+import {globalSearch} from "./general.action";
 import {createInteraction} from "./interaction.action";
 import {fetchCountries, fetchJobs, fetchLocation} from "./job.action";
 import {
@@ -56,6 +57,7 @@ export {
   getUserStats,
   getUserTopTags,
   getUsers,
+  globalSearch,
   hasSavedQuestion,
   hasVoted,
   incrementViews,

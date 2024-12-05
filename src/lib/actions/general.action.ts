@@ -35,7 +35,9 @@ export const globalSearch = async (
   const searchableTypes = ["question", "answer", "user", "tag"];
 
   try {
-    if (type?.toLowerCase() && !searchableTypes.includes(type.toLowerCase())) {
+    const typeLower = type?.toLowerCase();
+
+    if (!typeLower || !searchableTypes.includes(typeLower)) {
       for (const {model, type, searchFiled} of modelsAndTypes) {
         const queryResults = await model
           .find({

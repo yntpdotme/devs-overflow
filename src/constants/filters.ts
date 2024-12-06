@@ -39,3 +39,10 @@ export const TagQuestionFilters = [
   {name: "Most Recent", value: "mostrecent"},
   {name: "Most Answered", value: "mostanswered"},
 ];
+
+export const GlobalSearchFilters = [
+  { name: "Question", value: "question" },
+  { name: "Answer", value: "answer" },
+  { name: "User", value: "user" },
+  { name: "Tag", value: "tag" },
+];

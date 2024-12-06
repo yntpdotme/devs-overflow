@@ -34,15 +34,15 @@ const HomeFilter = () => {
   };
 
   return (
-    <div className="max-sm:mt-8 mt-10 flex gap-4 px-6 sm:px-12">
+    <div className="mt-10 flex gap-4 px-6 max-sm:mt-8 sm:px-12">
       {HomePageFilters.map(({name, value}) => (
         <Button
           key={value}
           onClick={() => handleFilterChange(value)}
           className={cn(
-            "hidden body-medium rounded-md capitalize shadow-none sm:block px-6",
+            "body-medium hidden rounded-md px-6 capitalize shadow-none sm:block",
             selectedFilter === value
-              ? "bg-primary-100 text-primary-500 hover:bg-primary-100 dark:bg-dark-300 dark:text-primary-500 dark:hover:bg-dark-400"
+              ? "primary-gradient !text-white hover:bg-primary-100 dark:hover:bg-dark-400"
               : "bg-light-800 text-dark-400 hover:bg-light-700 dark:bg-dark-300 dark:text-light-700 dark:hover:bg-dark-400"
           )}
         >

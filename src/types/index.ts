@@ -242,21 +242,29 @@ export type Job = {
   job_city?: string;
   job_state?: string;
   job_country?: string;
-}
+};
 
 export type Country = {
   name: {
     common: string;
   };
-}
+};
 
 export type GlobalSearchParams = {
   query: string;
   type: string | null;
-}
+};
 
 export type GlobalSearchItem = {
   title: string;
   type: "question" | "answer" | "user" | "tag" | "job";
   id: string;
-}
+};
+
+export type UpdateUserParams = {
+  name?: string;
+  username?: string;
+  portfolio?: string;
+  location?: string;
+  bio?: string;
+};

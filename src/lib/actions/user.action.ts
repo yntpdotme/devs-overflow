@@ -10,6 +10,7 @@ import {
   GetUserSchema,
   GetUserTagsSchema,
   PaginatedSearchParamsSchema,
+  UpdateUserSchema,
 } from "@/lib/schemas";
 import {assignBadges} from "@/lib/utils";
 import {
@@ -23,6 +24,7 @@ import {
   GetUserTagsParams,
   PaginatedSearchParams,
   Question as QuestionType,
+  UpdateUserParams,
   User as UserType,
 } from "@/types";
 
@@ -321,3 +323,36 @@ export const getUserTopTags = async (
     return handleError(error) as ErrorResponse;
   }
 };
+
+export async function updateUser(
+  params: UpdateUserParams
+): Promise<ActionResponse<UserType>> {
+  const validationResult = await action({
+    params,
+    schema: UpdateUserSchema,
+    authorize: true,
+  });
+
+  if (validationResult instanceof Error) {
+    return handleError(validationResult) as ErrorResponse;
+  }
+
+  const {user} = validationResult.session!;
+
+  try {
+    if (user?.email === "guest@user.com")
+      throw new Error("Guest accounts cannot be modified.");
+
+    const updatedUser = await User.findByIdAndUpdate(user?.id, params, {
+      new: true,
+    }).lean();
+
+    return {
+      success: true,
+      data: JSON.parse(JSON.stringify(updatedUser)),
+      status: 200,
+    };
+  } catch (error) {
+    return handleError(error) as ErrorResponse;
+  }
+}

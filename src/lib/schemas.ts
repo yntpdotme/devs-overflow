@@ -383,3 +383,27 @@ export const GlobalSearchSchema = z.object({
   query: z.string(),
   type: z.string().nullable().optional(),
 });
+
+export const UpdateUserSchema = z.object({
+  name: z
+    .string()
+    .min(1, {message: "Name is required."})
+    .max(50, {message: "Name cannot exceed 50 characters."})
+    .regex(/^[a-zA-Z\s]+$/, {
+      message: "Name can only contain letters and spaces.",
+    }),
+  username: z
+    .string()
+    .min(3, {message: "Username must be at least 3 characters long."})
+    .max(30, {message: "Username cannot exceed 30 characters."}),
+  portfolio: z
+    .string()
+    .optional()
+    .refine(val => !val || z.string().url().safeParse(val).success, {
+      message: "Please provide a valid URL",
+    }),
+  location: z.string().min(3, {message: "Please provide proper location"}),
+  bio: z.string().min(3, {
+    message: "Bio must be at least 3 characters.",
+  }),
+});

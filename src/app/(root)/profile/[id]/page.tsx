@@ -22,6 +22,7 @@ import {
 } from "@/lib/actions";
 import {RouteParams} from "@/types";
 import Link from "next/link";
+import ROUTES from "@/constants/routes";
 
 const Profile = async ({params, searchParams}: RouteParams) => {
   const {id} = await params;
@@ -138,7 +139,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
 
         <div className="flex justify-end max-sm:mb-5 max-sm:w-full sm:mt-3">
           {loggedInUser?.user?.id === user._id && (
-            <Link href="/profile/edit">
+            <Link href={ROUTES.EDIT_PROFILE}>
               <Button className="paragraph-medium btn-secondary text-dark300_light900 min-h-10 min-w-36 px-4 py-3">
                 Edit Profile
               </Button>
@@ -218,7 +219,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
               )}
             />
 
-            <Pagination page={page} isNext={hasMoreQuestions} />
+            <Pagination page={page} isNext={hasMoreAnswers} />
           </TabsContent>
         </Tabs>
 

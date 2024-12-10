@@ -12,10 +12,10 @@ import {cn} from "@/lib/utils";
 
 const NavLinks = ({
   isMobileNav = false,
-  userId,
+  username,
 }: {
   isMobileNav?: boolean;
-  userId?: string | null;
+  username?: string | null;
 }) => {
   const pathname = usePathname();
 
@@ -27,8 +27,8 @@ const NavLinks = ({
           pathname === item.route;
 
         const href =
-          item.route === "/profile" && userId
-            ? ROUTES.PROFILE(userId)
+          item.route === "/profile" && username
+            ? ROUTES.PROFILE(username)
             : item.route;
 
         const LinkComponent = (

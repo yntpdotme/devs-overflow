@@ -63,7 +63,7 @@ export const createAnswer = async (
         authorId: userId as string,
       });
     });
-    
+
     await session.commitTransaction();
 
     revalidatePath(ROUTES.QUESTION(questionId));
@@ -124,7 +124,7 @@ export const getAnswers = async (
     const totalAnswers = await Answer.countDocuments({question: questionId});
 
     const answers = await Answer.find({question: questionId})
-      .populate("author", "_id name image")
+      .populate("author", "_id name image username")
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
@@ -159,7 +159,8 @@ export const deleteAnswer = async (
   }
 
   const {answerId} = validationResult.params!;
-  const userId = validationResult.session?.user?.id;
+  const userId = validationResult.session?.user?.id!;
+  const username = validationResult.session?.user?.username!;
 
   const session = await mongoose.startSession();
 
@@ -198,7 +199,7 @@ export const deleteAnswer = async (
 
     await session.commitTransaction();
 
-    revalidatePath(ROUTES.PROFILE(userId!));
+    revalidatePath(ROUTES.PROFILE(username));
 
     return {success: true};
   } catch (error) {

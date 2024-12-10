@@ -69,11 +69,12 @@ const QuestionDetails = async ({params, searchParams}: RouteParams) => {
         <div className="flex items-center justify-start gap-2">
           <UserAvatar
             id={author._id}
+            username={author.username}
             name={author.name}
             imageUrl={author.image}
             className="size-6"
           />
-          <Link href={ROUTES.PROFILE(author._id)}>
+          <Link href={ROUTES.PROFILE(author.username)}>
             <p className="paragraph-medium text-dark300_light700">
               {author.name}
             </p>

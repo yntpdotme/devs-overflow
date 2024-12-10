@@ -34,6 +34,7 @@ const Navbar = async () => {
         {session?.user?.id && (
           <UserAvatar
             id={session.user.id}
+            username={session.user.username}
             name={session.user.name!}
             imageUrl={session.user?.image}
             className="size-6 sm:size-8"

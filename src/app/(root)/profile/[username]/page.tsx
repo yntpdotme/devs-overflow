@@ -25,15 +25,15 @@ import Link from "next/link";
 import ROUTES from "@/constants/routes";
 
 const Profile = async ({params, searchParams}: RouteParams) => {
-  const {id} = await params;
+  const {username} = await params;
   const {page, pageSize} = await searchParams;
 
-  if (!id) notFound();
+  if (!username) notFound();
 
   const loggedInUser = await auth();
 
   const {success, data, error} = await getUser({
-    userId: id,
+    username,
   });
 
   if (!success) {
@@ -52,7 +52,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
   const {user} = data!;
 
   const {data: userStats} = await getUserStats({
-    userId: id,
+    userId: user._id,
   });
 
   const {
@@ -60,7 +60,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
     data: userQuestions,
     error: userQuestionsError,
   } = await getUserQuestions({
-    userId: id,
+    userId: user._id,
     page: Number(page) || 1,
     pageSize: Number(pageSize) || 5,
   });
@@ -70,7 +70,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
     data: userAnswers,
     error: userAnswersError,
   } = await getUserAnswers({
-    userId: id,
+    userId: user._id,
     page: Number(page) || 1,
     pageSize: Number(pageSize) || 5,
   });
@@ -80,7 +80,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
     data: userTopTags,
     error: userTopTagsError,
   } = await getUserTopTags({
-    userId: id,
+    userId: user._id,
   });
 
   const {questions, isNext: hasMoreQuestions} = userQuestions!;
@@ -93,6 +93,7 @@ const Profile = async ({params, searchParams}: RouteParams) => {
         <div className="flex flex-col items-start gap-4 lg:flex-row">
           <UserAvatar
             id={user._id}
+            username={user.username}
             name={user.name}
             imageUrl={user.image}
             className="size-28 rounded-full object-cover"

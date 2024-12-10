@@ -4,10 +4,12 @@ import {FilterQuery, PipelineStage, Types} from "mongoose";
 
 import {Answer, Question, User} from "@/database";
 import {action, handleError} from "@/lib/handlers";
+import {ValidationError} from "@/lib/http-errors";
 import {
   GetUserAnswersSchema,
   GetUserQuestionsSchema,
   GetUserSchema,
+  GetUserStatsSchema,
   GetUserTagsSchema,
   PaginatedSearchParamsSchema,
   UpdateUserSchema,
@@ -21,6 +23,7 @@ import {
   GetUserAnswersParams,
   GetUserParams,
   GetUserQuestionsParams,
+  GetUserStatsParams,
   GetUserTagsParams,
   PaginatedSearchParams,
   Question as QuestionType,
@@ -108,10 +111,19 @@ export const getUser = async (
     return handleError(validationResult) as ErrorResponse;
   }
 
-  const {userId} = validationResult.params!;
+  const parsedParams = validationResult.params!;
+  let user;
 
   try {
-    const user = await User.findById(userId);
+    if ("userId" in parsedParams) {
+      user = await User.findById(parsedParams.userId);
+    } else if ("username" in parsedParams) {
+      user = await User.findOne({username: parsedParams.username});
+    } else {
+      throw new ValidationError({
+        user: ["Either userId or username must be provided."],
+      });
+    }
 
     if (!user) throw new Error("User not found");
 
@@ -127,7 +139,7 @@ export const getUser = async (
 };
 
 export const getUserStats = async (
-  params: GetUserParams
+  params: GetUserStatsParams
 ): Promise<
   ActionResponse<{
     totalQuestions: number;
@@ -137,7 +149,7 @@ export const getUserStats = async (
 > => {
   const validationResult = await action({
     params,
-    schema: GetUserSchema,
+    schema: GetUserStatsSchema,
   });
 
   if (validationResult instanceof Error) {
@@ -218,7 +230,7 @@ export const getUserQuestions = async (
 
     const questions = await Question.find({author: userId})
       .populate("tags", "name")
-      .populate("author", "_id name image")
+      .populate("author", "_id name image username")
       .sort({views: -1})
       .skip(skip)
       .limit(limit);
@@ -254,7 +266,7 @@ export const getUserAnswers = async (
     const totalAnswers = await Answer.countDocuments({author: userId});
 
     const answers = await Answer.find({author: userId})
-      .populate("author", "_id name image")
+      .populate("author", "_id name image username")
       .skip(skip)
       .limit(limit);
 

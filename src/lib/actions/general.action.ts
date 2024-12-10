@@ -52,7 +52,7 @@ export const globalSearch = async (
                 ? `Answers containing ${query}`
                 : item[searchFiled],
             type,
-            id: type === "answer" ? item.question : item._id,
+            id: type === 'user'? item.username : type === "answer" ? item.question : item._id,
           }))
         );
       }

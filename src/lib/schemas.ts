@@ -268,7 +268,27 @@ export const CollectionBaseSchema = z.object({
     .refine(val => val.length === 24, {message: "Invalid questionId"}),
 });
 
-export const GetUserSchema = z.object({
+export const GetUserSchema = z.union([
+  z.object({
+    userId: z
+      .string({
+        // eslint-disable-next-line camelcase
+        required_error: "User ID is required.",
+        // eslint-disable-next-line camelcase
+        invalid_type_error: "User ID must be a string.",
+      })
+      .length(24, {message: "Invalid userId"})
+      .optional(),
+  }),
+  z.object({
+    username: z
+      .string()
+      .min(3, {message: "Username must be at least 3 characters"})
+      .optional(),
+  }),
+]);
+
+export const GetUserStatsSchema = z.object({
   userId: z
     .string({
       // eslint-disable-next-line camelcase

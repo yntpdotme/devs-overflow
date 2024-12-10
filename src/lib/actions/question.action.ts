@@ -134,7 +134,7 @@ export const getQuestion = cache(
     try {
       const question = await Question.findById(questionId)
         .populate("tags")
-        .populate("author", "_id name image");
+        .populate("author", "_id name image username");
 
       if (!question) {
         throw new Error("Question not found");
@@ -378,7 +378,7 @@ export const getQuestions = async (
 
     const questions = await Question.find(filterQuery)
       .populate("tags", "name")
-      .populate("author", "_id name image")
+      .populate("author", "_id name image username")
       .sort(sortCriteria)
       .skip(skip)
       .limit(limit)
@@ -461,6 +461,7 @@ export const deleteQuestion = async (
 
   const {questionId} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
+  const username = validationResult.session?.user?.username!;
 
   const session = await mongoose.startSession();
 
@@ -517,7 +518,7 @@ export const deleteQuestion = async (
 
     await session.commitTransaction();
 
-    revalidatePath(ROUTES.PROFILE(userId!));
+    revalidatePath(ROUTES.PROFILE(username));
 
     return {success: true};
   } catch (error) {

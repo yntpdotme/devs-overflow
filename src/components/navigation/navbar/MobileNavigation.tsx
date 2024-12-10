@@ -56,7 +56,7 @@ const MobileNavigation = async () => {
 
         <SheetClose asChild>
           <section className="no-scrollbar flex h-[calc(100dvh-200px)] flex-col gap-4 overflow-y-auto py-12">
-            <NavLinks isMobileNav userId={userId} />
+            <NavLinks isMobileNav username={session?.user.username} />
           </section>
         </SheetClose>
 
@@ -73,7 +73,7 @@ const MobileNavigation = async () => {
               >
                 <Button
                   type="submit"
-                  className="base-medium flex w-full items-center justify-start gap-4 !bg-transparent px-4 py-3  shadow-none"
+                  className="base-medium flex w-full items-center justify-start gap-4 !bg-transparent px-4 py-3 shadow-none"
                 >
                   <LogOut className="ml-[2px] !size-[14px] text-black dark:text-white" />
                   <span className="text-dark300_light900 paragraph-regular">

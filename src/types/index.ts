@@ -12,6 +12,7 @@ export type Author = {
   _id: string;
   name: string;
   image: string;
+  username: string;
 };
 
 export type Question = {
@@ -159,7 +160,9 @@ export type User = {
   createdAt: Date;
 };
 
-export type GetUserParams = {
+export type GetUserParams = { userId: string } | { username: string };
+
+export type GetUserStatsParams = {
   userId: string;
 };
 

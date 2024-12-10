@@ -7,6 +7,7 @@ import {Avatar, AvatarFallback} from "./ui/avatar";
 
 type UserAvatarProps = {
   id: string;
+  username: string;
   name: string;
   imageUrl?: string | null;
   className?: string;
@@ -14,14 +15,14 @@ type UserAvatarProps = {
 };
 
 const UserAvatar = ({
-  id,
   name,
+  username,
   imageUrl,
   className,
   fallbackClassName,
 }: UserAvatarProps) => {
   return (
-    <Link href={ROUTES.PROFILE(id)}>
+    <Link href={ROUTES.PROFILE(username)}>
       <Avatar className={cn("relative", className)}>
         {imageUrl ? (
           <Image
@@ -34,7 +35,7 @@ const UserAvatar = ({
         ) : (
           <AvatarFallback
             className={cn(
-              "primary-gradient font-space-grotesk font-semibold text-white text-sm",
+              "primary-gradient font-space-grotesk text-sm font-semibold text-white",
               fallbackClassName
             )}
           >

@@ -13,13 +13,14 @@ const UserCard = ({user}: UserCardProps) => {
       <article className="background-light900_dark200 light-border flex w-full flex-col items-center justify-center rounded-xl border p-8">
         <UserAvatar
           id={user._id}
+          username={user.username}
           name={user.name}
           imageUrl={user.image}
           className="size-24 xs:size-[100px]"
           fallbackClassName="text-3xl tracking-widest"
         />
 
-        <Link href={ROUTES.PROFILE(user._id)}>
+        <Link href={ROUTES.PROFILE(user.username)}>
           <div className="mt-4 text-center">
             <h3 className="h3-bold text-dark200_light900 line-clamp-1">
               {user.name}

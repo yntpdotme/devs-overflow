@@ -49,6 +49,7 @@ const AnswerCard = ({
         <div className="flex flex-1 items-start gap-2 sm:items-center">
           <UserAvatar
             id={author._id}
+            username={author.username}
             name={author.name}
             imageUrl={author.image}
             className="size-5 rounded-full object-cover max-sm:mt-1.5"

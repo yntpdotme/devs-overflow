@@ -1,7 +1,8 @@
 "use server";
 
 import {Answer, Question, Tag, User} from "@/database";
-import {action, handleError} from "@/lib/handlers";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {GlobalSearchSchema} from "@/lib/schemas";
 import {
   ActionResponse,
@@ -52,7 +53,12 @@ export const globalSearch = async (
                 ? `Answers containing ${query}`
                 : item[searchFiled],
             type,
-            id: type === 'user'? item.username : type === "answer" ? item.question : item._id,
+            id:
+              type === "user"
+                ? item.username
+                : type === "answer"
+                  ? item.question
+                  : item._id,
           }))
         );
       }

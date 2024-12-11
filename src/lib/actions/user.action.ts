@@ -3,7 +3,8 @@
 import {FilterQuery, PipelineStage, Types} from "mongoose";
 
 import {Answer, Question, User} from "@/database";
-import {action, handleError} from "@/lib/handlers";
+import { handleError } from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {ValidationError} from "@/lib/http-errors";
 import {
   GetUserAnswersSchema,

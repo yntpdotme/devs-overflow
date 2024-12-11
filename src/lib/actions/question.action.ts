@@ -17,7 +17,8 @@ import {
 } from "@/database";
 import {QuestionDoc} from "@/database/question.model";
 import connectDB from "@/lib/db";
-import {action, handleError} from "@/lib/handlers";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {
   AskQuestionSchema,
   DeleteQuestionSchema,

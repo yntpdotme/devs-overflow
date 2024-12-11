@@ -5,7 +5,8 @@ import {revalidatePath} from "next/cache";
 
 import ROUTES from "@/constants/routes";
 import {Collection, Question} from "@/database";
-import {action, handleError} from "@/lib/handlers";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {CollectionBaseSchema, PaginatedSearchParamsSchema} from "@/lib/schemas";
 import {
   ActionResponse,

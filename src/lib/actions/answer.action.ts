@@ -3,9 +3,10 @@ import mongoose from "mongoose";
 import {revalidatePath} from "next/cache";
 
 import ROUTES from "@/constants/routes";
-import {Question, Vote} from "@/database";
-import Answer, {AnswerDoc} from "@/database/answer.model";
-import {action, handleError} from "@/lib/handlers";
+import {Answer, Question, Vote} from "@/database";
+import {AnswerDoc} from "@/database/answer.model";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {
   AnswerSchema,
   DeleteAnswerSchema,

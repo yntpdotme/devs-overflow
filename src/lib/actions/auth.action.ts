@@ -6,7 +6,8 @@ import mongoose from "mongoose";
 import {signIn} from "@/auth";
 import {Account, User} from "@/database";
 import connectDB from "@/lib/db";
-import {action, handleError} from "@/lib/handlers";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {NotFoundError} from "@/lib/http-errors";
 import {SignInSchema, SignUpSchema} from "@/lib/schemas";
 import {ActionResponse, AuthCredentials, ErrorResponse} from "@/types";
@@ -22,10 +23,10 @@ export const signUpWithCredentials = async (
   const {name, username, email, password} = validationResult.params!;
 
   const session = await mongoose.startSession();
-  
+
   try {
     session.startTransaction();
-    
+
     const existingUser = await User.findOne({email});
     if (existingUser) throw new Error("Email already in use");
 
@@ -36,6 +37,8 @@ export const signUpWithCredentials = async (
       session,
     });
 
+    const hashedPassword = await bcryptjs.hash(password, 10);
+
     await Account.create(
       [
         {
@@ -43,7 +46,7 @@ export const signUpWithCredentials = async (
           name,
           provider: "credentials",
           providerAccountId: email,
-          password,
+          password: hashedPassword,
         },
       ],
       {session}

@@ -2,9 +2,10 @@
 
 import mongoose from "mongoose";
 
-import {User} from "@/database";
-import Interaction, {InteractionDoc} from "@/database/interaction.model";
-import {action, handleError} from "@/lib/handlers";
+import {Interaction, User} from "@/database";
+import {InteractionDoc} from "@/database/interaction.model";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {CreateInteractionSchema} from "@/lib/schemas";
 import {
   ActionResponse,

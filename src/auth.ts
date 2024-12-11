@@ -4,7 +4,6 @@ import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import Google from "next-auth/providers/google";
 
-import {getUser} from "@/lib/actions";
 import {api} from "@/lib/api";
 import {SignInSchema} from "@/lib/schemas";
 
@@ -61,13 +60,11 @@ export const {handlers, auth, signIn, signOut} = NextAuth({
 
         const userId = existingAccount.userId;
 
-        const {data} = await getUser({
-          userId: userId.toString(),
-        });
-        if (!data?.user) return token;
+        const {data: user} = await api.users.getById(userId.toString());
+        if (!user) return token;
 
         if (userId) token.sub = userId.toString();
-        token.username = data.user.username;
+        token.username = user.username;
       }
 
       return token;
@@ -76,7 +73,7 @@ export const {handlers, auth, signIn, signOut} = NextAuth({
       if (token.sub && session.user) session.user.id = token.sub;
       if (token.username && session.user)
         session.user.username = token.username;
-      
+
       return session;
     },
     async signIn({user, profile, account}) {

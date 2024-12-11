@@ -5,7 +5,8 @@ import {FilterQuery} from "mongoose";
 import {Question} from "@/database";
 import Tag from "@/database/tag.model";
 import connectDB from "@/lib/db";
-import {action, handleError} from "@/lib/handlers";
+import {handleError} from "@/lib/handlers";
+import action from "@/lib/handlers/action";
 import {
   GetTagQuestionsSchema,
   PaginatedSearchParamsSchema,

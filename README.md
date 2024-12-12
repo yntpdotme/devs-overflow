@@ -4,9 +4,14 @@
 Ask, answer and accelerate your developer journey.
 </p>
 
+<p align=center>
+  <img width = "700px" alt="Jio Network blocking the view? Network switch reveals the magic!" src="./public/devsflow-stack.png">
+<p>
+
 <div align= "center">
 
-[![Twitter Badge](https://img.shields.io/badge/-@yntpdotme-1ca0f1?style=flat&labelColor=1ca0f1&logo=twitter&logoColor=white&link=https://twitter.com/yntpdotme)](https://twitter.com/yntpdotme) &nbsp; [![Linkedin Badge](https://img.shields.io/badge/-yntpdotme-0e76a8?style=flat&labelColor=0e76a8&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/yntpdotme/) &nbsp; [![Mail Badge](https://img.shields.io/badge/-akashkadlag14-c0392b?style=flat&labelColor=c0392b&logo=gmail&logoColor=white)](mailto:akashkadlag14@gmail.com) &nbsp; [![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)&nbsp; [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
+[![Twitter Badge](https://img.shields.io/badge/-@yntpdotme-1ca0f1?style=social&labelColor=red&logo=x&logoColor=black&link=https://twitter.com/yntpdotme)](https://twitter.com/yntpdotme)&nbsp;&nbsp;[![Linkedin Badge](https://img.shields.io/badge/@yntpdotme-0e76a8)](https://www.linkedin.com/in/yntpdotme/)&nbsp;&nbsp;[![Mail Badge](https://img.shields.io/badge/-hello@yntp.me-c0392b?style=flat&labelColor=c0392b&logo=gmail&logoColor=pink)](mailto:hello@yntp.me)
+ &nbsp;[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-%23FE5196?logo=conventionalcommits&logoColor=white)](https://conventionalcommits.org)&nbsp; [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 
 </div>
 
@@ -14,7 +19,7 @@ Ask, answer and accelerate your developer journey.
 
 <h2 align="center">
 
-<img src = "./public/eyes-to-see.gif" width = 26px align="top"/> &nbsp;[See it in Action](https://github.com/yntpdotme/devs-overflow/) &nbsp;»
+<img src = "./public/eyes-to-see.gif" width = 26px align="top"/> &nbsp;[See it in Action](https://devs-overflow.vercel.app) &nbsp;»
 
 </h2>
 
@@ -33,6 +38,14 @@ Ask, answer and accelerate your developer journey.
 ## <a name="introduction">❄️&nbsp;Introduction</a>
 
 Devs-Overflow is a modern, AI-powered Q&A platform built for developers. It combines the power of community knowledge with intelligent solutions to help developers find answers, share expertise, and grow together. Delve into the codebase to explore more.
+
+<br>
+
+<a href="https://devs-overflow.vercel.app/">
+  <p align=center>
+    <img width = "650px" alt="Jio Network blocking the view? Network switch reveals the magic!" src="./public/devsflow.png">
+  <p>
+</a>
 
 <br>
 

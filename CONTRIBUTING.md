@@ -1,8 +1,7 @@
 # How to Contribute
 
-Thank you for considering contributing to our collaborative learning environment!
+Thank you for considering contributing to Devs Overflow.
 
-We welcome any suggestions or improvements that can enhance the learning experience for all cohort members.
 </br></br>
 
 ## Pull Requests

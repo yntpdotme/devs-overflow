@@ -22,6 +22,7 @@ export const signUpWithCredentials = async (
   }
   const {name, username, email, password} = validationResult.params!;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {

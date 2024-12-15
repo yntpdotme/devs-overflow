@@ -5,6 +5,7 @@ import {revalidatePath} from "next/cache";
 
 import ROUTES from "@/constants/routes";
 import {Answer, Question, Vote} from "@/database";
+import connectDB from "@/lib/db";
 import {handleError} from "@/lib/handlers";
 import action from "@/lib/handlers/action";
 import {
@@ -72,6 +73,7 @@ export const createVote = async (
   const {actionId, actionType, voteType} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {

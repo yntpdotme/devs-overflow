@@ -5,6 +5,7 @@ import {revalidatePath} from "next/cache";
 import ROUTES from "@/constants/routes";
 import {Answer, Question, Vote} from "@/database";
 import {AnswerDoc} from "@/database/answer.model";
+import connectDB from "@/lib/db";
 import {handleError} from "@/lib/handlers";
 import action from "@/lib/handlers/action";
 import {
@@ -39,6 +40,7 @@ export const createAnswer = async (
   const {content, questionId} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {
@@ -163,6 +165,7 @@ export const deleteAnswer = async (
   const userId = validationResult.session?.user?.id!;
   const username = validationResult.session?.user?.username!;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {

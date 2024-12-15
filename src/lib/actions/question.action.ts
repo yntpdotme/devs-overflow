@@ -57,6 +57,7 @@ export const createQuestion = async (
   const {title, content, tags} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {
@@ -164,6 +165,7 @@ export const editQuestion = async (
   const {title, content, tags, questionId} = validationResult.params!;
   const userId = validationResult.session?.user?.id;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {
@@ -464,6 +466,7 @@ export const deleteQuestion = async (
   const userId = validationResult.session?.user?.id;
   const username = validationResult.session?.user?.username!;
 
+  await connectDB();
   const session = await mongoose.startSession();
 
   try {

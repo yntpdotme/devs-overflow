@@ -41,7 +41,7 @@ const connectDB = async () => {
         return result;
       })
       .catch(error => {
-        logger.info("Failed to connect to MongoDB:", error);
+        logger.error("Failed to connect to MongoDB:", error);
         cached.promise = null;
         throw error;
       });

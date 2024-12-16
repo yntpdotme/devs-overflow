@@ -35,7 +35,27 @@ const connectDB = async () => {
 
   if (!cached.promise) {
     cached.promise = mongoose
-      .connect(MONGODB_URL, {dbName: "devs-overflow"})
+      .connect(MONGODB_URL, {
+        dbName: "devs-overflow",
+        // Disable mongoose buffering to prevent timeout issues
+        bufferCommands: false,
+
+        // Connection pool settings
+        maxPoolSize: 10,
+        minPoolSize: 2,
+
+        // Timeout settings
+        serverSelectionTimeoutMS: 10000, // 10 seconds
+        socketTimeoutMS: 45000, // 45 seconds
+        connectTimeoutMS: 10000, // 10 seconds
+
+        // Write concern for better reliability
+        retryWrites: true,
+        w: "majority",
+
+        // Heartbeat settings
+        heartbeatFrequencyMS: 10000,
+      })
       .then(result => {
         logger.info("Connected to MongoDB");
         return result;
@@ -50,5 +70,8 @@ const connectDB = async () => {
   cached.conn = await cached.promise;
   return cached.conn;
 };
+
+// Set global mongoose options
+mongoose.set('bufferCommands', false);
 
 export default connectDB;

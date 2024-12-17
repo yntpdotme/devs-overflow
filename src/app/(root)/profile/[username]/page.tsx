@@ -12,6 +12,7 @@ import {Button} from "@/components/ui/button";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ProfileLink from "@/components/user/ProfileLink";
 import Stats from "@/components/user/Stats";
+import ROUTES from "@/constants/routes";
 import {EMPTY_ANSWERS, EMPTY_QUESTION, EMPTY_TAGS} from "@/constants/states";
 import {
   getUser,
@@ -22,7 +23,6 @@ import {
 } from "@/lib/actions";
 import {RouteParams} from "@/types";
 import Link from "next/link";
-import ROUTES from "@/constants/routes";
 
 const Profile = async ({params, searchParams}: RouteParams) => {
   const {username} = await params;
@@ -116,11 +116,11 @@ const Profile = async ({params, searchParams}: RouteParams) => {
                   title="Portfolio"
                 />
               )}
+
               {user.location && (
                 <ProfileLink
                   imgUrl="/icons/location.svg"
-                  href={user.location}
-                  title="Location"
+                  title={user.location}
                 />
               )}
 

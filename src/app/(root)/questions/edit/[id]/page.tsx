@@ -14,7 +14,7 @@ const EditQuestion = async ({params}: RouteParams) => {
   if (!session) redirect(ROUTES.SIGN_IN);
 
   const {success, data: question} = await getQuestion({questionId: id});
-  if (!success) return notFound;
+  if (!success) return notFound();
 
   return (
     <section className="px-6 pt-10 sm:px-12 lg:pt-16">

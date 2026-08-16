@@ -5,9 +5,12 @@ import connectDB from "@/lib/db";
 import {handleError} from "@/lib/handlers";
 import {NotFoundError, ValidationError} from "@/lib/http-errors";
 import {UserSchema} from "@/lib/schemas";
-import {APIErrorResponse, RouteParams} from "@/types";
+import {APIErrorResponse} from "@/types";
 
-export const GET = async (_: NextRequest, {params}: RouteParams) => {
+export const GET = async (
+  _: NextRequest,
+  {params}: {params: Promise<{id: string}>}
+) => {
   const {id} = await params;
   if (!id) throw new NotFoundError("User");
 
@@ -23,7 +26,10 @@ export const GET = async (_: NextRequest, {params}: RouteParams) => {
   }
 };
 
-export const DELETE = async (_: NextRequest, {params}: RouteParams) => {
+export const DELETE = async (
+  _: NextRequest,
+  {params}: {params: Promise<{id: string}>}
+) => {
   const {id} = await params;
   if (!id) throw new NotFoundError("User");
 
@@ -39,7 +45,10 @@ export const DELETE = async (_: NextRequest, {params}: RouteParams) => {
   }
 };
 
-export const PUT = async (request: Request, {params}: RouteParams) => {
+export const PUT = async (
+  request: Request,
+  {params}: {params: Promise<{id: string}>}
+) => {
   const {id} = await params;
   if (!id) throw new NotFoundError("User");
 

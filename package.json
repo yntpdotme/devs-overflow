@@ -2,6 +2,9 @@
   "name": "devs-overflow",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": "24.x"
+  },
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
@@ -32,15 +35,15 @@
     "dayjs": "^1.11.13",
     "lucide-react": "^0.473.0",
     "mongoose": "^8.15.0",
-    "next": "^15.3.2",
+    "next": "16.3.1",
     "next-auth": "5.0.0-beta.25",
     "next-mdx-remote": "^5.0.0",
     "next-themes": "^0.4.6",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "query-string": "^9.1.2",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
     "react-hook-form": "^7.56.4",
     "react-icons": "^5.5.0",
     "slugify": "^1.6.6",
@@ -54,11 +57,11 @@
     "@eslint/js": "^9.27.0",
     "@tailwindcss/typography": "^0.5.16",
     "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.17.47",
-    "@types/react": "^19.1.4",
-    "@types/react-dom": "^19.1.5",
-    "eslint": "^9.27.0",
-    "eslint-config-next": "15.1.0",
+    "@types/node": "^24.0.0",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "eslint": "10.8.1",
+    "eslint-config-next": "16.3.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-plugin-import": "^2.31.0",
@@ -69,5 +72,11 @@
     "tailwindcss": "^3.4.17",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/react": "19.2.18",
+      "@types/react-dom": "19.2.4"
+    }
   }
 }
